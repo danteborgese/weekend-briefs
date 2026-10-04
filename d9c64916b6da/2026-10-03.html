@@ -134,7 +134,7 @@
   <div style="border:1px solid #cfe6d3;border-radius:12px;overflow:hidden;">
     <div style="background-color:#2f7d4f;padding:16px 18px;">
       <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#cdeed9;">Sunday morning · Oct 4 · 8:00 AM start</p>
-      <p style="margin:4px 0 0 0;font-size:20px;font-weight:700;color:#ffffff;">🚲 Tour de Bronx</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 0 0;"><tr><td width="36" valign="middle" style="padding:0;"><input type="checkbox" id="item-18" data-item="18" aria-label="Mark field trip done" style="width:24px;height:24px;margin:0 8px 0 0;accent-color:#ffffff;cursor:pointer;vertical-align:middle;"></td><td data-text="18" data-done-color="#cdeed9" valign="middle" style="padding:0;font-size:20px;line-height:1.3;font-weight:700;color:#ffffff;"><label for="item-18" style="cursor:pointer;">🚲 Tour de Bronx</label></td></tr></table>
     </div>
     <div style="padding:16px 18px;background-color:#f4fbf6;">
       <p style="margin:0 0 12px 0;font-size:14px;line-height:1.5;color:#2b2b2b;">The 32nd annual Tour de Bronx, billed as the largest free cycling event in New York State. Choose a 10-mile family-friendly, 25-mile or 40-mile route through the Bronx (South Bronx, Wakefield, Riverdale, Orchard Beach and waterfront parks). All routes finish at the New York Botanical Garden.</p>
@@ -187,7 +187,7 @@
     var cell = document.querySelector('[data-text="' + box.getAttribute("data-item") + '"]');
     if (!cell) { return; }
     cell.style.textDecoration = box.checked ? "line-through" : "none";
-    cell.style.color = box.checked ? "#9a9a9a" : "";
+    cell.style.color = box.checked ? (cell.getAttribute("data-done-color") || "#9a9a9a") : "";
     cell.style.opacity = box.checked ? "0.6" : "";
   }
   Array.prototype.forEach.call(boxes, function (box) {
