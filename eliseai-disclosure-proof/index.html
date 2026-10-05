@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EliseAI proof · Renter-visible disclosure</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #1a1d24;
+      --phone: #0b0c10;
+      --border: #2a2f3a;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --prospect: #2c2f36;
+      --agent: #0a84ff;
+      --agent-text: #fff;
+      --btn: #0a84ff;
+      --btn-disabled: #3a3f4a;
+      --scene: #8ab4f8;
+      --footer: #6b7280;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    .scene-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      color: var(--scene);
+      font-weight: 500;
+    }
+
+    .scene-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .scene-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.2s;
+    }
+
+    .scene-dots span.active {
+      background: var(--scene);
+    }
+
+    .scene-dots span.done {
+      background: #34c759;
+    }
+
+    .phone {
+      background: var(--phone);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    }
+
+    .phone-bar {
+      background: var(--panel);
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .phone-bar .contact {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .phone-bar .sub {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .thread {
+      min-height: 340px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 16px 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      scroll-behavior: smooth;
+    }
+
+    .thread:empty::after {
+      content: "Tap below to start the conversation.";
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .day-marker {
+      align-self: center;
+      font-size: 0.7rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      padding: 3px 10px;
+      border-radius: 10px;
+      margin: 4px 0 8px;
+    }
+
+    .branch-marker {
+      align-self: center;
+      font-size: 0.72rem;
+      color: var(--scene);
+      background: rgba(138,180,248,0.12);
+      border: 1px solid rgba(138,180,248,0.25);
+      padding: 6px 12px;
+      border-radius: 10px;
+      margin: 10px 0 6px;
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 0.92rem;
+      line-height: 1.4;
+      animation: fadeIn 0.28s ease;
+      word-wrap: break-word;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bubble.prospect {
+      align-self: flex-end;
+      background: var(--prospect);
+      color: var(--text);
+      border-bottom-right-radius: 6px;
+    }
+
+    .bubble.agent {
+      align-self: flex-start;
+      background: var(--agent);
+      color: var(--agent-text);
+      border-bottom-left-radius: 6px;
+    }
+
+    .bubble .meta {
+      display: block;
+      font-size: 0.68rem;
+      opacity: 0.75;
+      margin-top: 4px;
+    }
+
+    .end-note {
+      align-self: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .controls {
+      margin-top: 18px;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--btn);
+      color: #fff;
+      transition: background 0.15s, transform 0.1s, opacity 0.15s;
+      letter-spacing: -0.01em;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #0070e0;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      background: var(--btn-disabled);
+      color: #8b919a;
+      cursor: default;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 10px;
+      min-height: 1.2em;
+    }
+
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--footer);
+      line-height: 1.5;
+      max-width: 420px;
+    }
+
+    footer a {
+      color: #8ab4f8;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>EliseAI proof · Renter-visible disclosure</h1>
+      <p>Three taps · disclosure, stop on moved-on, confirm &amp; end clean</p>
+    </header>
+
+    <div class="scene-label">
+      <span id="sceneText">Scene 0 · Ready</span>
+      <div class="scene-dots" aria-hidden="true">
+        <span id="dot1"></span>
+        <span id="dot2"></span>
+        <span id="dot3"></span>
+      </div>
+    </div>
+
+    <div class="phone" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="phone-bar">
+        <div class="contact">Allegro Leasing</div>
+        <div class="sub">SMS · Elise · AI leasing assistant</div>
+      </div>
+      <div class="thread" id="thread"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="advance" type="button">1 · Ask to tour</button>
+      <p class="hint" id="hint">Tap to show clear AI disclosure on first reply.</p>
+    </div>
+  </div>
+
+  <footer>
+    Prototype — renter-visible disclosure + stop rules · sourced from
+    <a href="https://www.sfgate.com/local/article/bay-area-apartment-ai-21332194.php" target="_blank" rel="noopener noreferrer">SFGATE Feb 20, 2026</a>
+  </footer>
+
+  <script>
+    (function () {
+      const thread = document.getElementById("thread");
+      const btn = document.getElementById("advance");
+      const hint = document.getElementById("hint");
+      const sceneText = document.getElementById("sceneText");
+      const dots = [
+        document.getElementById("dot1"),
+        document.getElementById("dot2"),
+        document.getElementById("dot3"),
+      ];
+
+      let scene = 0;
+
+      function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+      }
+
+      function bubble(role, text, meta) {
+        const b = el("div", "bubble " + role);
+        b.appendChild(document.createTextNode(text));
+        if (meta) {
+          const m = el("span", "meta", meta);
+          b.appendChild(m);
+        }
+        return b;
+      }
+
+      function scrollBottom() {
+        requestAnimationFrame(function () {
+          thread.scrollTop = thread.scrollHeight;
+        });
+      }
+
+      function clearThread() {
+        thread.innerHTML = "";
+      }
+
+      function setDots(n) {
+        dots.forEach(function (d, i) {
+          d.classList.remove("active", "done");
+          if (i < n - 1) d.classList.add("done");
+          else if (i === n - 1) d.classList.add("active");
+        });
+      }
+
+      function showDisclosureBase() {
+        thread.appendChild(el("div", "day-marker", "Today"));
+        thread.appendChild(
+          bubble("prospect", "Hi, I'd like to tour a 1-bedroom this week.")
+        );
+        thread.appendChild(
+          bubble(
+            "agent",
+            "Hi — I'm Elise, an AI leasing assistant for Allegro (not a person named Grace). I can help schedule your tour. What days work?",
+            "Elise · AI leasing assistant"
+          )
+        );
+      }
+
+      function runScene1() {
+        clearThread();
+        sceneText.textContent = "Scene 1 · Clear AI disclosure";
+        setDots(1);
+        showDisclosureBase();
+        scrollBottom();
+        btn.textContent = "2 · Moved on — stop";
+        hint.textContent = "Next: prospect moves on — agent stops (no chase).";
+      }
+
+      function runScene2() {
+        sceneText.textContent = "Scene 2 · Stop when they move on";
+        setDots(2);
+        thread.appendChild(
+          bubble("prospect", "I've moved on — found another place. Thanks.")
+        );
+        thread.appendChild(
+          bubble(
+            "agent",
+            "Got it. I'll stop following up. Good luck with the move.",
+            "Elise · AI leasing assistant"
+          )
+        );
+        thread.appendChild(
+          el("div", "end-note", "Thread ends — no further follow-ups.")
+        );
+        scrollBottom();
+        btn.textContent = "3 · Confirm tour — clean end";
+        hint.textContent = "Next: alternate path — confirm tour and end clean.";
+      }
+
+      function runScene3() {
+        clearThread();
+        sceneText.textContent = "Scene 3 · Confirm path";
+        setDots(3);
+        thread.appendChild(
+          el(
+            "div",
+            "branch-marker",
+            "Alternate path · after disclosure → confirm → clean end"
+          )
+        );
+        showDisclosureBase();
+        thread.appendChild(
+          bubble("prospect", "Saturday at 11 works — confirm that tour.")
+        );
+        thread.appendChild(
+          bubble(
+            "agent",
+            "You're confirmed for Saturday at 11:00 AM at Allegro. Address and entry details are below. Reply if you need anything else — otherwise you're all set.",
+            "Elise · AI leasing assistant"
+          )
+        );
+        thread.appendChild(
+          bubble(
+            "agent",
+            "Allegro · Saturday 11:00 AM\n1200 Market St entrance · Concierge will check you in.",
+            "Tour details"
+          )
+        );
+        thread.appendChild(
+          el("div", "end-note", "You're all set — conversation ends clean.")
+        );
+        scrollBottom();
+        btn.textContent = "Done";
+        btn.disabled = true;
+        hint.textContent = "All three beats shown. Refresh to replay.";
+      }
+
+      btn.addEventListener("click", function () {
+        if (scene === 0) {
+          scene = 1;
+          runScene1();
+        } else if (scene === 1) {
+          scene = 2;
+          runScene2();
+        } else if (scene === 2) {
+          scene = 3;
+          runScene3();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
