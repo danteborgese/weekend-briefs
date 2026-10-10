@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Brief</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f3a5f%22/%3E%3Cpath%20d%3D%22M14%2042a18%2018%200%200%201%2036%200z%22%20fill%3D%22%23f6c445%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2244%22%20width%3D%2244%22%20height%3D%224.5%22%20rx%3D%222.25%22%20fill%3D%22%23f8d77a%22/%3E%3Cpath%20d%3D%22M23%2031l6%206%2012-13%22%20fill%3D%22none%22%20stroke%3D%22%231f3a5f%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#1f3a5f">
+<meta name="apple-mobile-web-app-title" content="Daily Brief">
+<style>
+
+:root{--navy:#1f3a5f;--gold:#f6c445;--bg:#f3f1ec;--ink:#1d2433;--muted:#6b7280;--line:#ece8df;--green:#2f7d4f;--greenTint:#eaf5ee;--card:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 0 64px}
+/* header */
+header{background:var(--navy);color:#fff;padding:18px 22px 16px;border-radius:0 0 18px 18px}
+@media(min-width:800px){header{border-radius:18px;margin-top:22px}}
+.hrow{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:.2px}
+.brand svg{width:28px;height:28px;border-radius:8px}
+.sync{font-size:12px;color:#c9d6e8;display:flex;align-items:center;gap:6px}
+.sync i{width:7px;height:7px;border-radius:50%;background:#7bd389;display:inline-block}
+.switch{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:14px}
+.switch button.arrow{background:none;border:0;color:#fff;width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1}
+.switch button.arrow:hover{background:rgba(255,255,255,.1)}
+.wk{text-align:center;min-width:180px}
+.wk b{display:block;font-size:20px;letter-spacing:.2px}
+.wk span{font-size:12px;color:#c9d6e8}
+.jump{display:none;margin:6px auto 0;background:var(--gold);color:var(--navy);border:0;border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700}
+.jump.show{display:block}
+/* strip */
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:16px 0 0}
+.d{background:rgba(255,255,255,.07);border:1px solid transparent;border-radius:12px;padding:7px 2px 8px;text-align:center;color:#fff;min-height:74px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.d .dn{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#c9d6e8}
+.d .dd{font-size:17px;font-weight:700;line-height:1.1}
+.d.we{background:rgba(123,211,137,.13)}
+.d.today .dd{background:var(--gold);color:var(--navy);border-radius:999px;padding:0 7px}
+.d.sel{border-color:#fff;background:rgba(255,255,255,.16)}
+.d.past{opacity:.92}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;max-width:52px;min-height:9px}
+.dot{width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor}
+.dot.f{background:currentColor}
+.dot.r{background:repeating-linear-gradient(45deg,currentColor 0 1.5px,transparent 1.5px 3px)}
+.dot.g{border-style:dashed;opacity:.55}
+.more{font-size:10px;color:#c9d6e8}
+.offtag{font-size:10px;color:#c9d6e8;font-style:italic}
+/* sections */
+main{padding:0 14px}
+@media(min-width:800px){main{padding:0}}
+.card{background:var(--card);border-radius:16px;padding:16px 18px;margin-top:14px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.label{font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--muted)}
+/* meter */
+.meter{display:flex;gap:14px;align-items:center}
+.grade{flex:none;width:52px;height:52px;border-radius:50%;border:3px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;color:var(--navy);font-size:18px;line-height:1}
+.grade small{font-size:9px;font-weight:600;color:var(--muted);margin-top:2px}
+.mbody{flex:1;min-width:0}
+.mtop{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mtop b{font-size:16px}
+.mtop span{font-size:12px;color:var(--muted)}
+.bar{height:10px;border-radius:999px;background:#eeebe4;overflow:hidden;display:flex;margin:8px 0 6px}
+.bar i{display:block;height:100%}
+.hatch{background:repeating-linear-gradient(45deg,var(--gold) 0 4px,#fff3cc 4px 8px)}
+.mnote{font-size:12.5px;color:#7a5d00}
+.buckets{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:8px}
+.wkp{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:#4b5563}.wkp b{color:var(--green)}
+.bk{font-size:12.5px}
+.bk .bl{display:flex;justify-content:space-between;gap:6px}
+.bk .bl b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bk .bl span{color:var(--muted);white-space:nowrap}
+.bk .bb{height:5px;border-radius:9px;margin-top:4px;display:flex;overflow:hidden}
+details.more-b summary{list-style:none;cursor:pointer;font-size:12px;color:var(--muted);margin-top:10px;font-weight:600}
+details.more-b summary::-webkit-details-marker{display:none}
+/* day head */
+.dayhead{display:flex;align-items:flex-end;justify-content:space-between;margin:22px 4px 0;gap:8px}
+.dayhead h2{margin:0;font-size:22px;letter-spacing:-.2px}
+.dayhead .sub{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;letter-spacing:.3px}
+.banner{margin-top:12px;border-radius:12px;padding:10px 14px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.banner.hist{background:#eef1f6;color:#33476a}
+.banner.fut{background:#fff7dc;color:#7a5d00}
+.banner button{background:none;border:1px solid currentColor;border-radius:999px;padding:2px 10px;font-size:12px;white-space:nowrap}
+/* weather + cal */
+.wc{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+@media(min-width:640px){.wc{grid-template-columns:1.25fr 1fr}}
+.wx{background:#fff8e6;border-radius:16px;padding:14px 16px}
+.wx.we{background:#fffaf0}
+.wxs{display:grid;grid-template-columns:1fr;gap:12px}
+.wxs.two{grid-template-columns:1fr 1fr}
+.wxc .city{font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#a87600}
+.wxc .t{display:flex;align-items:center;gap:10px;margin-top:2px}
+.wxc .t svg{width:40px;height:40px;flex:none}
+.wxc .t b{font-size:26px;color:var(--navy)} .wxc .t span{color:var(--muted)}
+.tbar{position:relative;height:6px;border-radius:9px;background:#efe9da;margin:8px 0 2px}
+.tbar i{position:absolute;top:0;bottom:0;border-radius:9px;background:linear-gradient(90deg,#6aa9d6,#f2b544,#ee7d32)}
+.rain{font-size:12px;color:#4b5563;display:flex;align-items:center;gap:6px;margin-top:6px}
+.rain .rb{flex:1;height:4px;border-radius:9px;background:#e6edf5;overflow:hidden}.rain .rb i{display:block;height:100%;background:#5b8fd1}
+.means{margin-top:10px;font-size:13px;border-left:3px solid var(--gold);padding-left:9px}
+.cal{background:#eef4fb;border-radius:16px;padding:14px 16px}
+.cal .ev{display:flex;gap:10px;font-size:13.5px;padding:6px 0;border-top:1px solid #dde7f3}
+.cal .ev:first-of-type{border-top:0}
+.cal .ev .tm{flex:none;width:84px;color:#2f5b8f;font-weight:600;font-size:12.5px}
+.cal .empty{font-size:13.5px;color:#4b5563;margin-top:4px}
+/* oneline */
+.one{margin:14px 4px 0;font-size:15.5px;font-weight:600;color:var(--navy);line-height:1.4}
+/* blocks */
+.block{margin-top:14px}
+.bh{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 6px}
+.bh b{font-size:13px;letter-spacing:.3px}
+.bh span{font-size:12px;color:var(--muted)}
+.task{display:flex;gap:12px;background:#fff;border-radius:14px;padding:12px 14px;margin-top:8px;border-left:4px solid var(--c,#999);position:relative}
+.task .cb{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid #cfc9bd;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:1px;padding:0}
+.task.done .cb{background:var(--c);border-color:var(--c)}
+.task.done .cb:after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.task .tt{font-weight:600;font-size:14.5px}
+.task.done .tt{color:#8a8f99;text-decoration:line-through;text-decoration-color:#c9c4b8}
+.task .meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-top:3px;align-items:center}
+.task .body{font-size:13px;color:#4b5563;margin-top:4px}
+.task .body a{color:var(--c);font-weight:600}
+.badge{font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;background:#fff1c7;color:#8a6200}
+.badge.ok{background:#dff3e6;color:#22693f}
+.badge.new{background:#e8eefc;color:#2a4fa0}
+.badge.ip{background:#eef1f6;color:#33476a}
+.task.ghost{background:transparent;border:1.5px dashed #d6d0c3;border-left:4px dashed var(--c);opacity:.75}
+.task.ghost .tt{color:#8a8f99;font-weight:500}
+.task.ghost .cb{visibility:hidden;width:0;margin:0;border:0}
+.mv{background:none;border:0;padding:0;color:var(--c);font-weight:700;font-size:12px}
+.task.ro .cb{cursor:default}
+.add{display:flex;align-items:center;gap:8px;margin:12px 4px 0;background:none;border:1.5px dashed #d6d0c3;border-radius:14px;width:calc(100% - 8px);padding:11px 14px;color:var(--muted);font-size:14px;text-align:left}
+.add:hover{border-color:#b9b2a3;color:var(--ink)}
+/* off / weekend */
+.off{background:#fff;border-radius:16px;padding:22px 18px;margin-top:14px;text-align:center}
+.off h3{margin:6px 0 4px;font-size:18px;color:var(--navy)}
+.off p{margin:0;color:#4b5563;font-size:14px}
+.off small{display:block;margin-top:10px;color:var(--muted);font-size:12px}
+.wkd .task{--c:var(--green)}
+.weline{color:var(--green)}
+.when{font-size:11px;font-weight:700;color:var(--green);background:var(--greenTint);border-radius:999px;padding:1px 8px}
+details.groc{background:var(--greenTint);border-radius:12px;margin-top:8px;padding:0 12px}
+details.groc summary{list-style:none;cursor:pointer;padding:12px 0;font-weight:600;font-size:14px;display:flex;justify-content:space-between}
+details.groc summary::-webkit-details-marker{display:none}
+details.groc summary span{color:var(--muted);font-weight:500;font-size:13px}
+.gl{columns:2;column-gap:18px;padding-bottom:12px;font-size:14px}
+.gl label{display:flex;gap:8px;align-items:center;padding:3px 0;break-inside:avoid}
+.gl input{accent-color:var(--green);width:17px;height:17px}
+.gadd{display:flex;gap:8px;padding-bottom:14px}
+.gadd input{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit}
+.read{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f6f3ff;border-radius:14px;padding:12px 14px;margin-top:8px;font-size:13.5px;text-decoration:none}
+.read b{display:block;font-size:14px;color:#4a2f80}
+.summary{display:flex;gap:8px;margin-top:12px}
+.summary div{flex:1;background:#fff;border-radius:12px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+.summary b{display:block;font-size:20px;color:var(--ink)}
+footer{margin:26px 4px 0;font-size:12.5px;color:var(--muted);text-align:center}
+footer em{display:block;color:var(--navy);font-style:normal;font-weight:600;font-size:13.5px;margin-bottom:6px}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(18,28,45,.38);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.scrim.open{display:flex}
+@media(min-width:640px){.scrim{align-items:center}}
+.sheet{background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom))}
+@media(min-width:640px){.sheet{border-radius:20px}}
+.sheet h3{margin:0 0 12px;font-size:17px}
+.sheet input[type=text]{width:100%;border:1.5px solid #ddd6c8;border-radius:12px;padding:12px;font:inherit;font-size:16px}
+.sheet .row{margin-top:14px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chip{flex:none;border:1.5px solid #e2dccf;background:#fff;border-radius:999px;padding:6px 11px;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.we{color:var(--green)}
+.chip.on.we{background:var(--green);border-color:var(--green);color:#fff}
+.chip input[type=date]{border:0;font:inherit;font-size:13px;background:transparent;width:120px}
+.bchip{display:inline-flex;align-items:center;gap:6px}
+.bchip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.chip.bon{background:var(--t);border-color:var(--c)}
+.seg{display:flex;background:#f1eee7;border-radius:12px;padding:3px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:8px;font-size:13px}
+.seg button.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1);font-weight:600}
+.sheet .go{margin-top:16px;width:100%;background:var(--navy);color:#fff;border:0;border-radius:12px;padding:13px;font-weight:700;font-size:15px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:999px;padding:9px 16px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;white-space:nowrap}
+.toast.show{opacity:1}
+.toast.act{pointer-events:auto;display:flex;gap:14px;align-items:center}
+.toast button{background:none;border:0;color:var(--gold);font-weight:700;padding:0;font-size:13px}
+.task .tt.ed{cursor:pointer}
+.task .tt.ed:hover{text-decoration:underline;text-decoration-color:#d6d0c3;text-underline-offset:3px}
+.task .dots3{position:absolute;top:8px;right:8px;border:0;background:none;color:#a39b8a;font-size:18px;line-height:1;padding:2px 6px;border-radius:8px;opacity:0;transition:opacity .15s}
+.task:hover .dots3,.task .dots3:focus{opacity:1}
+.task .dots3:hover{background:#f3f1ec}
+@media(hover:none){.task .dots3{display:none}}
+.sheet textarea{width:100%;border:1.5px solid #ddd6c8;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;resize:vertical;min-height:64px;margin-top:8px}
+.del{display:none;margin:14px auto 0;background:none;border:0;color:#c0392b;font-size:14px;font-weight:600}
+.del.show{display:block}
+.sheet .x{float:right;border:0;background:none;font-size:22px;line-height:1;color:var(--muted);margin-top:-4px}
+.sync{transition:color .3s}
+.sync.busy i{background:var(--gold);animation:pulse 1s infinite}
+.sync.bot i{background:#7bd389;box-shadow:0 0 0 3px rgba(123,211,137,.25)}
+@keyframes pulse{50%{opacity:.35}}
+.mock{font-size:11px;text-align:center;color:#a39b8a;margin-top:10px}
+.toast.act{pointer-events:auto;display:flex;gap:14px;align-items:center}
+.toast button{background:none;border:0;color:var(--gold);font-weight:700;padding:0;font-size:13px}
+.task .tt.ed{cursor:pointer}
+.task .tt.ed:hover{text-decoration:underline;text-decoration-color:#d6d0c3;text-underline-offset:3px}
+.task .dots3{position:absolute;top:8px;right:8px;border:0;background:none;color:#a39b8a;font-size:18px;line-height:1;padding:2px 6px;border-radius:8px;opacity:0;transition:opacity .15s}
+.task:hover .dots3,.task .dots3:focus{opacity:1}
+.task .dots3:hover{background:#f3f1ec}
+@media(hover:none){.task .dots3{display:none}}
+.sheet textarea{width:100%;border:1.5px solid #ddd6c8;border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;resize:vertical;min-height:64px;margin-top:8px}
+.del{display:none;margin:14px auto 0;background:none;border:0;color:#c0392b;font-size:14px;font-weight:600}
+.del.show{display:block}
+.sheet .x{float:right;border:0;background:none;font-size:22px;line-height:1;color:var(--muted);margin-top:-4px}
+.sync{transition:color .3s}
+.sync.busy i{background:var(--gold);animation:pulse 1s infinite}
+.sync.bot i,.sync.logged i{background:#7bd389;box-shadow:0 0 0 3px rgba(123,211,137,.25)}
+.sync.err i,.sync.local i{background:#e0a03a}
+@keyframes pulse{50%{opacity:.35}}
+.task .body ul{margin:4px 0;padding-left:18px}
+.task .body p{margin:4px 0}
+.ghost .rec{color:#22693f}
+.links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+.wkl{display:block;text-align:center;font-size:12.5px;color:var(--muted);margin-top:12px}
+.sheet{max-height:92vh;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="hrow">
+    <div class="brand"><svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#2a4a74"/><path d="M14 42a18 18 0 0 1 36 0z" fill="#f6c445"/><rect x="10" y="44" width="44" height="4.5" rx="2.25" fill="#f8d77a"/><path d="M23 31l6 6 12-13" fill="none" stroke="#1f3a5f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Brief</div>
+    <div class="sync" id="sync"><i></i><span>Connecting…</span></div>
+  </div>
+  <div class="switch">
+    <button class="arrow" id="prev" aria-label="Previous week">‹</button>
+    <div class="wk"><b id="wkLabel"></b><span id="wkSub"></span></div>
+    <button class="arrow" id="next" aria-label="Next week">›</button>
+  </div>
+  <button class="jump" id="jump">Back to this week</button>
+  <div class="strip" id="strip"></div>
+</header>
+<main>
+  <section class="card" id="meter"></section>
+  <div id="day"></div>
+  <footer id="foot"></footer>
+</main>
+</div>
+<div class="scrim" id="scrim">
+  <div class="sheet" role="dialog" aria-label="Task">
+    <button class="x" id="aClose" aria-label="Close">×</button><h3 id="aHead">Add a task</h3>
+    <input type="text" id="aTitle" placeholder="What needs doing?" autocomplete="off" maxlength="300">
+    <textarea id="aNotes" placeholder="Notes (optional)" maxlength="1500"></textarea>
+    <div class="row"><div class="label" style="margin-bottom:6px">Day</div><div class="chips" id="aDays"></div></div>
+    <div class="row"><div class="label" style="margin-bottom:6px">Bucket</div><div class="chips" id="aBuckets" style="flex-wrap:wrap"></div></div>
+    <div class="row" id="aBlockRow"><div class="label" style="margin-bottom:6px">Block</div>
+      <div class="seg" id="aBlock"><button data-v="creative" class="on">Morning · creating</button><button data-v="admin">Afternoon · managing</button></div></div>
+    <button class="go" id="aSave">Add</button>
+    <div class="hint" id="aHint"></div>
+    <button class="del" id="aDel">Delete task</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+"use strict";
+const DATA={"built_at": "2026-10-10T17:03:57+00:00", "sync_url": "https://daily-brief-sync.dlborgese.workers.dev", "log_baked_through": null, "buckets": {"corgi": {"l": "Corgi wrap-up", "c": "#c0583a", "t": "#f6dcd3", "tag": ""}, "job": {"l": "Job search", "c": "#2563b8", "t": "#d6e4f7", "tag": ""}, "ghd": {"l": "Great Harbor Digital", "c": "#0f8b8d", "t": "#cdeceb", "tag": "waiting on sandbox answer"}, "doers": {"l": "Doers", "c": "#d08a00", "t": "#f8e7c2", "tag": ""}, "course": {"l": "AI PM course", "c": "#7a4cb8", "t": "#e8dff5", "tag": ""}, "chores": {"l": "Chores & errands", "c": "#2f7d4f", "t": "#d3eddc", "tag": ""}, "admin": {"l": "Admin", "c": "#64748b", "t": "#e5e9ef", "tag": ""}}, "weeks": {"2026-10-05": {"kind": "live", "notion_page_id": "3f0cfd4a56ef8023bc4fc48b2f8dbd09", "notion_url": "https://app.notion.com/p/3f0cfd4a56ef8023bc4fc48b2f8dbd09", "reminder": "Progress > Perfection. A rough System v1 that ships today beats a perfect one on Thursday.", "days": [{"date": "2026-10-05", "kind": "work", "steps": [{"id": "wk-vacuum", "b": "chores", "t": "Vacuum", "e": "rollover", "time": "", "body": "Quick one, about 15 minutes.", "date": "2026-10-05", "from": "weekend", "block": "3f0cfd4a56ef81399bfceeede18aee42", "done": true}, {"id": "wk-surfaces", "b": "chores", "t": "Clean surfaces", "e": "rollover", "time": "", "body": "Quick one, about 15 minutes.", "date": "2026-10-05", "from": "weekend", "block": "3f0cfd4a56ef81c489dfdc60c0e3933a", "done": true}, {"id": "wk-laundry", "b": "chores", "t": "Laundry", "e": "rollover", "time": "", "body": "Fit it in when there is a gap.", "date": "2026-10-05", "from": "weekend", "block": "3f0cfd4a56ef8148a8f6e37592aa96c9", "done": true}, {"id": "wk-grocery", "b": "chores", "t": "Grocery shopping", "e": "rollover", "time": "", "body": "Fit it in when there is a gap.", "date": "2026-10-05", "from": "weekend", "block": "3f0cfd4a56ef811495b0fad5cb9b2df8", "done": true}, {"id": "wk-donate", "b": "chores", "t": "Donate clothes", "e": "rollover", "time": "", "body": "Pickup is set with All Of Us Clothing for Thu 10/8, 3 to 7 PM, bags in the lobby (<a target=\"_blank\" rel=\"noopener\" href=\"https://mail.google.com/mail/?authuser=dlborgese@gmail.com#all/thread-f:1878233915429804661\" style=\"color:#2f7d4f;font-weight:600;\">their email<\/a>). They still need your phone number. Tick this once the bags are gone.", "date": "2026-10-05", "from": "weekend", "block": "3f0cfd4a56ef81959477dbf0b15cd976"}, {"id": "w41-mon-corgi-edits", "b": "corgi", "t": "Finish base edits and send to Ana", "e": "creative", "time": "9:00 to 9:35", "body": "Get the edits to \"good enough\" and send them. Once sent, close every Corgi tab. Nothing else from Corgi is planned this week.", "date": "2026-10-05", "block": "3f0cfd4a56ef80e694b0d46b977ca219", "done": true}, {"id": "w41-mon-job-system", "b": "job", "t": "Build Job App System v1", "e": "creative", "time": "9:35 to 10:35", "body": "One Notion template with 6 stages: pick role, research, tailor resume, intro ask, apply, follow up and log. Write a \"done when\" line for each stage. <strong>Done when:<\/strong> the template is linked from your <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/690fb636c5c148098eccc26c7d3cd3a6\" style=\"color:#2563b8;\">NY PM PMM Pipeline<\/a>.", "date": "2026-10-05", "block": "3f0cfd4a56ef80c2bd33eb7d9120ebd4", "done": true}, {"id": "w41-mon-job-eliseai", "b": "job", "t": "Run EliseAI through stages 1-3", "e": "creative", "time": "10:35 to 11:50", "body": "<a target=\"_blank\" rel=\"noopener\" href=\"https://jobs.ashbyhq.com/EliseAI/f0c8d0af-8021-4a04-b0f9-de1baff48ee4\" style=\"color:#2563b8;font-weight:600;\">Associate PM, Housing<\/a> (on-site NYC, $150-220K). Research the Housing product, tailor your resume bullets to it, and draft the intro ask to Ben for Akshay Ramaswamy (Staff PM). Vivian Keegan (recruiter, via Kendall) is the backup. Note anything clunky in the template as you go.", "date": "2026-10-05", "block": "3f0cfd4a56ef80fc9941fd4bbceee82e", "done": true}, {"id": "w41-mon-corgi-expense", "b": "corgi", "t": "Expense the Marriott receipt", "e": "admin", "time": "1:30 to 1:40", "body": "Your Sep 27 stay at the Mayflower Hotel (DC). The Expedia confirmation is in Gmail (<a target=\"_blank\" rel=\"noopener\" href=\"https://mail.google.com/mail/?authuser=dlborgese@gmail.com#all/thread-f:1877455618564836369\" style=\"color:#c0583a;font-weight:600;\">itinerary 72079595160700<\/a>). There's no hotel folio in your inbox. If the expense needs one, request it from the hotel and submit with the confirmation for now.", "date": "2026-10-05", "block": "f67cfd4a56ef8301871801f986b46e4d", "done": true}], "ghosts": [{"of": "w41-mon-doers-adplacements", "b": "doers", "t": "Doers: list every ad placement", "time": "", "to": "2026-10-06", "path": "Mon → Tue"}], "note": "Today", "oneline": "Clear the weekend rollover, finish the Corgi edits, then build the job app system and push EliseAI through it.", "cal": [], "calNote": "No events on your calendar. Every block is yours.", "wx": [{"city": "New York", "code": 3, "hi": 71, "lo": 54, "pop": 1, "gust": 34}]}, {"date": "2026-10-06", "kind": "work", "steps": [{"id": "w41-tue-course", "b": "course", "t": "AI PM course", "e": "course", "time": "7:30 to 8:15", "body": "Pick up where you left off in the Study Plan. 45 min is about 1 to 2 lessons.", "date": "2026-10-06", "block": "3f0cfd4a56ef81e7b332d1f7824120db", "done": true}, {"id": "w41-tue-job-review", "b": "job", "t": "Review the EliseAI deep dive", "e": "creative", "time": "9:00 to 9:45", "body": "Step 4. EliseAI is at Contacts ready (step 3 done): the assistant's deep dive is on the <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eacfd4a56ef81a98f72db7ba5b06d26\" style=\"color:#2563b8;font-weight:600;\">EliseAI row<\/a>. Read it end to end and mark it up. The user is the property operator, not the renter. The five wedges are hypotheses, not findings. <strong>Done when:<\/strong> the dive is marked up and the assistant has your notes.", "date": "2026-10-06", "block": "3f0cfd4a56ef81dba100ccf804bb903f", "done": true}, {"id": "w41-tue-job-lennybot", "b": "job", "t": "Run the Lennybot paste", "e": "creative", "time": "9:45 to 10:15", "body": "Step 5, the Lenny pass. The assistant writes one paste: two wedges, the evidence, the ask. Paste it into Lennybot, then paste the reply back to the assistant. Only what matches a source you can open survives. <strong>Done when:<\/strong> Lennybot's reply is back with the assistant.", "date": "2026-10-06", "block": "3f1cfd4a56ef8113a0a3d66207c84368", "done": true}, {"id": "w41-tue-job-angle", "b": "job", "t": "Pick the EliseAI angle", "e": "creative", "time": "10:15 to 10:45", "body": "Step 6, first half. Pick one angle for the artifact, aimed at the property operator. Not a \"here is a flaw, hire me\" angle. Tell the assistant so it goes on the row (Stage: Angle picked). <strong>Done when:<\/strong> the row reads Angle picked with your one-line angle.", "date": "2026-10-06", "block": "3f0cfd4a56ef816da706ff1064723de4", "done": true}, {"id": "w41-mon-doers-adplacements", "b": "doers", "t": "Doers: list every ad placement", "e": "creative", "time": "10:45 to 11:25", "body": "First step on sponsorship ($$$). List every slot across YouTube, the podcast and the newsletter (pre-roll, mid-roll, description link, newsletter mention). Then count how many partners could fill them in a month. Wednesday's sponsor shortlist starts from this list. <strong>Done when:<\/strong> every slot is listed with a monthly partner count.", "date": "2026-10-06", "block": "3f0cfd4a56ef803e8854c2eda2b133c5", "done": true, "from": "Mon", "hops": 1}, {"id": "w41-tue-doers-sync", "b": "doers", "t": "Deploy Daily Brief Notion sync (Cloudflare)", "e": "admin", "time": "1:30 to 1:45", "body": "About 5 minutes with a free Cloudflare account. In <code>daily-brief/sync<\/code>: <code>npx wrangler login<\/code>, <code>npx wrangler secret put NOTION_SYNC_TOKEN<\/code>, then <code>npx wrangler deploy<\/code>. Or log into Cloudflare on my computer's browser and let me finish it. Until this lands, brief check-offs stay on this device only.", "date": "2026-10-06", "block": "a2c8d5d679c64e2a83ca3f4dad7c50c6", "done": true}, {"id": "w41-tue-chores-donate-reply", "b": "chores", "t": "Reply to All Of Us Clothing with your phone number", "e": "admin", "time": "1:30 to 1:35", "body": "They confirmed the pickup for <strong>Thu 10/8, 3 to 7 PM<\/strong>, bags left in the lobby, but they need a phone number to schedule it (<a target=\"_blank\" rel=\"noopener\" href=\"https://mail.google.com/mail/?authuser=dlborgese@gmail.com#all/thread-f:1878233915429804661\" style=\"color:#2f7d4f;font-weight:600;\">their reply<\/a>). Your train leaves at 2:02 PM Thursday, so the two bags go in the lobby before you head out. <strong>Done when:<\/strong> you've replied with your number.", "date": "2026-10-06", "block": "3f1cfd4a56ef8155a97be90fcdf24ee8", "done": true}], "ghosts": [{"of": "w41-tue-doers-spotify", "b": "doers", "t": "Spotify launch plan", "time": "", "to": "2026-10-07", "path": "Tue → Wed"}, {"of": "w41-tue-ghd-fleetstar", "b": "ghd", "t": "Fleetstar | Webflow Scribes (14 standard + events)", "time": "", "to": "2026-10-07", "path": "Tue → Wed"}, {"of": "w41-tue-ghd-union", "b": "ghd", "t": "Union (NEJB) | Webflow Scribes (14 standard + 4 client-specific)", "time": "", "to": "2026-10-07", "path": "Tue → Wed"}], "note": "Fleetstar + Union rolled to Wed (waited on Ian)", "oneline": "AI PM course first. Mark up the EliseAI deep dive, run the Lennybot paste and pick the angle, then list the Doers ad slots before the 11:30 GHD call. Afternoon managing: GHD Fleetstar and Union rolled to Wed while waiting on Ian.", "cal": [{"tm": "11:30 AM-12:00 PM", "t": "Ian <> Dante", "url": "https://www.google.com/calendar/event?eid=XzZjbzRjZGhnOGNyazJiOW04ZDJqZ2I5azY0cWs0YmEyOGgyazJiOWk2Y28zNmUxaDcxMGs2ZGhuOGtfMjAyNjEwMDZUMTUzMDAwWiBkbGJvcmdlc2VAbQ&ctz=America/New_York"}], "wx": [{"city": "New York", "code": 3, "hi": 64, "lo": 47, "pop": 0, "gust": 24}]}, {"date": "2026-10-07", "kind": "work", "steps": [{"id": "w41-wed-course", "b": "course", "t": "AI PM course", "e": "course", "time": "7:30 to 8:15", "body": "Pick up where you left off in the Study Plan. 45 min is about 1 to 2 lessons.", "date": "2026-10-07", "block": "3f0cfd4a56ef81f7a8cfde9810be831b"}, {"id": "w41-wed-job-artifact", "b": "job", "t": "Build the EliseAI write-up (2 to 3 pages)", "e": "creative", "time": "", "body": "Banked early: this is already checked off in Notion, and so is Thursday's finish pass. Step 6, the artifact. 2 to 3 pages on their user (the property operator), their competitors, and one place they could go that they're not already going. One paragraph at the top. Visuals. Sounds like you. No \"here is a flaw, hire me\" prototype. <strong>Done when:<\/strong> a full first draft has every section and at least one visual.", "date": "2026-10-07", "block": "3f0cfd4a56ef8135af31e4bc625b5552", "done": true}, {"id": "w41-wed-doers-shortlist", "b": "doers", "t": "Sponsor shortlist (10)", "e": "creative", "time": "9:00 to 10:15", "body": "From Sunday Systems, $$$ (sponsorship): find partners. Monday's list of every ad placement is done, so match names to it. Pull ten sponsors who fit the Doers audience and note which placement each one could fill. <strong>Done when:<\/strong> ten names are on the list, each with the placement it fits.", "date": "2026-10-07", "block": "3f0cfd4a56ef80b9949dc2183a05c84e", "done": true}], "ghosts": [{"of": "w41-wed-doers-trailer", "b": "doers", "t": "Channel trailer script", "time": "", "to": "2026-10-08", "path": "Wed → Thu"}, {"of": "w41-tue-doers-spotify", "b": "doers", "t": "Spotify launch plan", "time": "", "to": "2026-10-08", "path": "Tue → Wed → Thu"}, {"of": "w41-tue-ghd-fleetstar", "b": "ghd", "t": "Fleetstar | Webflow Scribes (14 standard + events)", "time": "", "to": "2026-10-08", "path": "Tue → Wed → Thu"}, {"of": "w41-tue-ghd-union", "b": "ghd", "t": "Union (NEJB) | Webflow Scribes (14 standard + 4 client-specific)", "time": "", "to": "2026-10-08", "path": "Tue → Wed → Thu"}, {"of": "w41-wed-doers-masters", "b": "doers", "t": "Doers: find the final video files for 15 episodes", "time": "", "to": "2026-10-08", "path": "Wed → Thu"}], "note": "Doers creative day · write-up banked · GHD waiting on Ian", "oneline": "AI PM course first. The EliseAI write-up is already banked, so the morning goes to Doers: sponsor shortlist, channel trailer script, then the Spotify plan. After the 1 PM webinar, GHD: Fleetstar test capture waiting on Ian's sandbox answer; Union (NEJB) after the Fleetstar test. Then pull the final video files for 15 Doers episodes into Drive.", "managing": "Afternoon · 2:00 to 3:30 PM ET, after the webinar", "cal": [{"tm": "1:00-2:00 PM", "t": "Grok Bot for Marketing: idea to launch with a team of Bots (webinar)", "url": "https://www.google.com/calendar/event?eid=X2Nscjc4YmExYjRybWtqMjc4NXM3Y285amFkbDNpa3EwY2xyNmFyamtlY242b3Q5ZWRsZ2cgZGxib3JnZXNlQG0&ctz=America/New_York"}], "wx": [{"city": "New York", "code": 0, "hi": 67, "lo": 46, "pop": 0, "gust": 21}]}, {"date": "2026-10-08", "kind": "work", "steps": [{"id": "w41-thu-course", "b": "course", "t": "AI PM course", "e": "course", "time": "7:30 to 8:15", "body": "Pick up where you left off in the Study Plan. 45 min is about 1 to 2 lessons.", "date": "2026-10-08", "block": "3f0cfd4a56ef8190bfd5d69beaef7b5e"}, {"id": "w41-thu-job-finalize", "b": "job", "t": "Finish the EliseAI write-up", "e": "creative", "time": "", "body": "Banked early: already checked off in Notion. Step 6, finished. The write-up (<a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f1cfd4a56ef816697f0c8afc4c5d101\" style=\"color:#2563b8;font-weight:600;\">Apollo for large operators<\/a>) is the Proof link on the EliseAI row. <strong>Done when:<\/strong> the write-up is final and the link is on the row.", "date": "2026-10-08", "block": "3f0cfd4a56ef81f0a243ca1bac689834", "done": true}, {"id": "w41-thu-job-click", "b": "job", "t": "Open the write-up link on the EliseAI row", "e": "admin", "time": "2:15 to 2:25", "body": "On the train. Step 7. The assistant stores the link on the <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eacfd4a56ef81a98f72db7ba5b06d26\" style=\"color:#2563b8;font-weight:600;\">EliseAI row<\/a> (Proof link). Click it from the row before any note exists, so you know the link works and is the version you mean to send. <strong>Done when:<\/strong> the link on the row opens the final write-up.", "date": "2026-10-08", "block": "3f1cfd4a56ef81dc9d8cce28e8aea2e9", "done": true}, {"id": "w41-thu-job-introask", "b": "job", "t": "Review the drafted Ben intro ask and send it yourself", "e": "admin", "time": "2:25 to 2:40", "body": "On the train. Step 8, outreach. The assistant drafts the ask to Ben: an intro to Akshay Ramaswamy (Staff PM at EliseAI, Scout's best intro), with the write-up link from the row. You review it and send it yourself; the assistant never sends. Vivian Keegan (recruiter) via Kendall is the backup. <strong>Done when:<\/strong> you've sent the ask to Ben and it's logged on the <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eacfd4a56ef81a98f72db7ba5b06d26\" style=\"color:#2563b8;font-weight:600;\">EliseAI row<\/a>.", "date": "2026-10-08", "block": "3f1cfd4a56ef81cdbe58ecdcb05d13b5", "done": true}, {"id": "w41-thu-doers-granola", "b": "doers", "t": "Sign the Granola sponsor contract", "e": "admin", "time": "3:30 to 3:40", "body": "From your email: Nicole at Granola sent a new DocuSign link Wednesday with the first video moved to October, as you asked. Read it once and sign. <a target=\"_blank\" rel=\"noopener\" href=\"https://mail.google.com/mail/?authuser=dlborgese@gmail.com#all/thread-f:1878407034166110940\" style=\"color:#d08a00;font-weight:600;\">DocuSign email<\/a> <strong>Done when:<\/strong> the contract is signed and DocuSign sends the completed copy.", "date": "2026-10-08", "block": "3f3cfd4a56ef81c7b344e160436c6bd6", "done": true}], "ghosts": [{"of": "w41-wed-doers-trailer", "b": "doers", "t": "Channel trailer script", "time": "9:00 to 9:45", "to": "2026-10-12", "path": "Wed → Thu", "carry": true}, {"of": "w41-tue-doers-spotify", "b": "doers", "t": "Spotify launch plan", "time": "9:45 to 10:25", "to": "2026-10-12", "path": "Tue → Wed → Thu", "carry": true}, {"of": "w41-thu-doers-hours", "b": "doers", "t": "Hours budget", "time": "10:25 to 11:00", "to": "2026-10-12", "path": "", "carry": true}, {"of": "w41-thu-doers-bookmarks", "b": "doers", "t": "X bookmarks: where would AI interns go", "time": "11:00 to 11:40", "to": "2026-10-12", "path": "", "carry": true}, {"of": "w41-thu-doers-team", "b": "doers", "t": "Deploy a full Grok Bot team", "time": "11:40 to 12:05", "to": "2026-10-12", "path": "", "carry": true}, {"of": "w41-thu-doers-os", "b": "doers", "t": "New system for running Doers", "time": "12:05 to 12:30", "to": "2026-10-12", "path": "", "carry": true}, {"of": "w41-thu-job-apply", "b": "job", "t": "Submit the EliseAI application, then send the note", "time": "2:40 to 3:30", "to": "2026-10-12", "path": "", "carry": true}, {"of": "w41-tue-ghd-fleetstar", "b": "ghd", "t": "Fleetstar | Webflow Scribes (14 standard + events)", "time": "3:40 to 3:45", "to": "2026-10-12", "path": "Tue → Wed → Thu", "carry": true}, {"of": "w41-tue-ghd-union", "b": "ghd", "t": "Union (NEJB) | Webflow Scribes (14 standard + 4 client-specific)", "time": "3:45 to 3:50", "to": "2026-10-12", "path": "Tue → Wed → Thu", "carry": true}, {"of": "w41-wed-doers-masters", "b": "doers", "t": "Doers: find the final video files for 15 episodes", "time": "3:50 to 4:35", "to": "2026-10-12", "path": "Wed → Thu", "carry": true}], "note": "Train to DC, laptop block · write-up banked", "oneline": "Travel day. AI PM course first. The EliseAI write-up is already banked, so the morning is all Doers: channel trailer script, the Spotify plan, then the hours budget and the systems work. The 2:02 PM train is the laptop block: open the link, send the Ben ask, apply and send the note, then sign the Granola contract.", "managing": "On the train · 2:02 to 5:27 PM ET · laptop block", "cal": [{"tm": "2:02-5:27 PM", "t": "Train to Washington DC", "url": "https://www.google.com/calendar/event?eid=OGRiZjRoNHFqOW1ycnVpMjNuazhhdHZ1Y2MgZGxib3JnZXNlQG0&ctz=America/New_York"}], "wx": [{"city": "New York", "code": 3, "hi": 76, "lo": 54, "pop": 1, "gust": 23}, {"city": "Washington", "code": 2, "hi": 80, "lo": 55, "pop": 0, "gust": 19}]}, {"date": "2026-10-09", "kind": "off", "steps": [], "ghosts": [], "note": "Day off", "oneline": "Day off. Golf event in DC with Garrett. No work steps and no course today.", "offNote": "Day off. Golf event in DC with Garrett. No work steps and no course today.", "cal": [], "calNote": "Day off. Golf event in DC with Garrett.", "wx": [{"city": "Washington", "code": 3, "hi": 76, "lo": 50, "pop": 0, "gust": 11}]}, {"date": "2026-10-10", "kind": "weekend", "steps": [], "ghosts": []}, {"date": "2026-10-11", "kind": "weekend", "steps": [], "ghosts": []}], "maps": {"steps": {"w41-mon-corgi-edits": "3f0cfd4a-56ef-80e6-94b0-d46b977ca219", "w41-mon-job-system": "3f0cfd4a-56ef-80c2-bd33-eb7d9120ebd4", "w41-mon-job-eliseai": "3f0cfd4a-56ef-80fc-9941-fd4bbceee82e", "w41-mon-doers-adplacements": "3f0cfd4a-56ef-803e-8854-c2eda2b133c5", "w41-mon-corgi-expense": "f67cfd4a-56ef-8301-8718-01f986b46e4d", "w41-tue-doers-spotify": "667cfd4a-56ef-836f-8c3f-01e9dbc394da", "w41-tue-doers-sync": "a2c8d5d6-79c6-4e2a-83ca-3f4dad7c50c6", "w41-wed-doers-shortlist": "3f0cfd4a-56ef-80b9-949d-c2183a05c84e", "w41-wed-doers-trailer": "b04cfd4a-56ef-8349-976c-018958507631", "w41-thu-doers-hours": "8accfd4a-56ef-8353-adb7-8133e368a67b", "w41-thu-doers-bookmarks": "89bcfd4a-56ef-83fd-8a1d-01191911d78a", "w41-thu-doers-os": "3f0cfd4a-56ef-8003-b1fa-e4128a6b5a1e", "w41-thu-doers-team": "3f0cfd4a-56ef-807e-8634-f308e75a4aa0", "w41-tue-course": "3f0cfd4a-56ef-81e7-b332-d1f7824120db", "w41-wed-course": "3f0cfd4a-56ef-81f7-a8cf-de9810be831b", "w41-thu-course": "3f0cfd4a-56ef-8190-bfd5-d69beaef7b5e", "w41-tue-job-review": "3f0cfd4a-56ef-81db-a100-ccf804bb903f", "w41-tue-job-lennybot": "3f1cfd4a-56ef-8113-a0a3-d66207c84368", "w41-tue-job-angle": "3f0cfd4a-56ef-816d-a706-ff1064723de4", "w41-wed-job-artifact": "3f0cfd4a-56ef-8135-af31-e4bc625b5552", "w41-thu-job-finalize": "3f0cfd4a-56ef-81f0-a243-ca1bac689834", "w41-thu-job-apply": "3f1cfd4a-56ef-81d1-8bb6-fbafbaeefa76", "w41-thu-job-click": "3f1cfd4a-56ef-81dc-9d8c-ce28e8aea2e9", "w41-thu-job-introask": "3f1cfd4a-56ef-81cd-be58-ecdcb05d13b5", "w41-tue-chores-donate-reply": "3f1cfd4a-56ef-8155-a97b-e90fcdf24ee8", "w41-tue-ghd-fleetstar": "5a7ae66e-0ebc-447b-ab9e-ca83a9ed5479", "w41-tue-ghd-union": "0c798e73-75cb-4f40-a8a6-29b95c5098bf", "w41-thu-doers-granola": "3f3cfd4a-56ef-81c7-b344-e160436c6bd6", "w41-wed-doers-masters": "3f3cfd4a-56ef-81fb-af79-e89e4f77723c"}}, "weekend": {"path": "/weekend-briefs/d9c64916b6da/2026-10-10.html", "sat": "2026-10-10", "html": "<!-- One line -->\n<tr><td style=\"padding:20px 28px 4px 28px;\">\n  <p style=\"margin:0 0 6px 0;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8a8a;\">One line to rule the weekend<\/p>\n  <p style=\"margin:0;font-size:17px;line-height:1.45;font-weight:600;color:#1f3a5f;\">Refund JustFly and book the Mexico flights. Saturday is the drive back from DC and your Apple appointment, and rainy Sunday is for chores.<\/p>\n<\/td><\/tr>\n\n<tr><td style=\"padding:16px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Weather -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 12px 0;font-size:18px;color:#2b2b2b;\">🌤️ Weekend Weather<\/h2>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n  <tr>\n    <td class=\"col\" width=\"50%\" valign=\"top\" style=\"padding:0 6px 10px 0;\">\n      <div style=\"background-color:#eef6ff;border-radius:10px;padding:14px;\">\n        <p style=\"margin:0;font-size:12px;font-weight:700;color:#4a6fa5;text-transform:uppercase;letter-spacing:1px;\">Saturday · Oct 10<\/p>\n        <p style=\"margin:6px 0 2px 0;font-size:28px;font-weight:700;color:#1f3a5f;\">⛅ 68° <span style=\"font-size:16px;font-weight:500;color:#6b7c93;\">/ 59°<\/span><\/p>\n        <p style=\"margin:0 0 8px 0;font-size:14px;color:#2b2b2b;\">Partly sunny<\/p>\n        <p style=\"margin:0;font-size:13px;color:#555;line-height:1.6;\">💧 Rain: <strong>0%<\/strong><br>💨 Wind: <strong>NE 3-8 mph<\/strong><\/p>\n      <\/div>\n    <\/td>\n    <td class=\"col\" width=\"50%\" valign=\"top\" style=\"padding:0 0 10px 6px;\">\n      <div style=\"background-color:#f1f3f5;border-radius:10px;padding:14px;\">\n        <p style=\"margin:0;font-size:12px;font-weight:700;color:#6b7c93;text-transform:uppercase;letter-spacing:1px;\">Sunday · Oct 11<\/p>\n        <p style=\"margin:6px 0 2px 0;font-size:28px;font-weight:700;color:#1f3a5f;\">🌧️ 67° <span style=\"font-size:16px;font-weight:500;color:#6b7c93;\">/ 63°<\/span><\/p>\n        <p style=\"margin:0 0 8px 0;font-size:14px;color:#2b2b2b;\">Rain showers after 8am, cloudy<\/p>\n        <p style=\"margin:0;font-size:13px;color:#555;line-height:1.6;\">💧 Rain: <strong>90%<\/strong> (0.5-0.75 in)<br>💨 Wind: <strong>E 10-18 mph<\/strong><\/p>\n      <\/div>\n    <\/td>\n  <\/tr>\n  <\/table>\n  <p style=\"margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#2b2b2b;\"><strong>Takeaway:<\/strong> Saturday is dry for the drive back from DC. Sunday is a washout (and 1-2 in more rain Sunday night), so make it the indoor day for chores, flights and research.<\/p>\n  <p style=\"margin:6px 0 0 0;font-size:11px;color:#9a9a9a;\">Source: <a target=\"_blank\" rel=\"noopener\" href=\"https://forecast.weather.gov/MapClick.php?lat=40.7831&amp;lon=-73.9712\" style=\"color:#9a9a9a;\">National Weather Service, Central Park NYC<\/a>, issued Oct 9, 2026 ~4:28 AM ET.<\/p>\n<\/td><\/tr>\n\n<tr><td style=\"padding:20px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Chores -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 4px 0;font-size:18px;color:#2b2b2b;\">🧺 Chores<\/h2>\n  <p style=\"margin:0 0 10px 0;font-size:13px;color:#8a8a8a;\">Quadrant 3 · 11 items<\/p>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:15px;line-height:1.4;\">\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-0\" data-item=\"0\" aria-label=\"Mark item 1 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"0\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-0\" style=\"cursor:pointer;\">Vacuum<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sun, indoors while it rains<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-1\" data-item=\"1\" aria-label=\"Mark item 2 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"1\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-1\" style=\"cursor:pointer;\">Clean surfaces<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sun, indoors while it rains<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-2\" data-item=\"2\" aria-label=\"Mark item 3 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"2\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-2\" style=\"cursor:pointer;\">Laundry<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sun, indoors while it rains<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-3\" data-item=\"3\" aria-label=\"Mark item 4 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"3\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-3\" style=\"cursor:pointer;\">Grocery shopping<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sat evening, right after the 5:35 PM Apple appointment on Madison, so you skip Sunday's rain<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-4\" data-item=\"4\" aria-label=\"Mark item 5 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"4\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-4\" style=\"cursor:pointer;\">Book the Mexico flights<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sun morning. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f0cfd4a56ef81da8caefbfa8cd5f6fa\" style=\"color:#4a6fa5;font-weight:600;\">Mexico plan<\/a><br>&bull; Fri Nov 6: AA 2692 LGA 6:00 AM to MIA, then AA 2132 to M&eacute;rida (confirm Jesse is on it).<br>&bull; Tue Nov 10: Volaris Y4 7470 MID 8:26 AM to OAX, with Mom and Jesse; get a fare with a carry-on.<br>&bull; Sun Nov 15: AA 2187/2117 OAX 2:20 PM to LGA, with Jesse.<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-5\" data-item=\"5\" aria-label=\"Mark item 6 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"5\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-5\" style=\"cursor:pointer;\">Cancel the original JustFly flights and get the refund<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">In progress. You declined Aeromexico's schedule change in JustFly chat on Oct 9; JustFly quoted a full $422.57 refund with no fees and you approved the cancellation; confirmation pending.<br><strong>Done when:<\/strong> JustFly confirms the cancellation and the $422.57 shows up on your card.<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-6\" data-item=\"6\" aria-label=\"Mark item 7 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"6\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-6\" style=\"cursor:pointer;\">Pull the 15 missing Doers episode files off the old hard drive<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sat evening or Sun, once the adapter arrives Sat. <a target=\"_blank\" rel=\"noopener\" href=\"https://drive.google.com/drive/folders/1UF5bdYnMFoA0o8G_87gTiS9XAtI4AWw2\" style=\"color:#4a6fa5;font-weight:600;\">Doers Drive folder<\/a><br>Copy the final files for all 15 into the Drive folder, then tell Doers Distribution where they are so it can make the Spotify copies and backdate them.<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-7\" data-item=\"7\" aria-label=\"Mark item 8 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"7\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-7\" style=\"cursor:pointer;\">Get a new phone battery<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sat 5:35 PM, booked: iPhone 14 battery at Apple Upper East Side, 940 Madison Ave (73rd to 74th St). On your Google Calendar.<br><strong>Next step:<\/strong> Back up the phone and check Settings &gt; Battery &gt; Battery Health beforehand (free with AppleCare+ if under 80%; otherwise about $99).<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-8\" data-item=\"8\" aria-label=\"Mark item 9 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"8\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-8\" style=\"cursor:pointer;\">Donate clothes<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Carried over. Easiest drop: Goodwill NYNJ Mini Shop, 1496 1st Ave (E 78th/79th), about 10 min walk. More options in <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eecfd4a56ef810ba881cc1741dcfe7a\" style=\"color:#4a6fa5;font-weight:600;\">last week's brief<\/a>.<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-9\" data-item=\"9\" aria-label=\"Mark item 10 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"9\" style=\"padding:8px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-9\" style=\"cursor:pointer;\">Make a visualization like @EconomyApp for my life or business<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sun afternoon. <a target=\"_blank\" rel=\"noopener\" href=\"https://x.com/EconomyApp\" style=\"color:#4a6fa5;font-weight:600;\">@EconomyApp on X<\/a><br>Use its style as inspiration and pick either life or business as the subject.<\/span><\/td><\/tr>\n<tr><td width=\"36\" valign=\"top\" style=\"padding:8px 0;\"><input type=\"checkbox\" id=\"item-15\" data-item=\"15\" aria-label=\"Mark item 11 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\"><\/td><td data-text=\"15\" style=\"padding:8px 0;\"><strong><label for=\"item-15\" style=\"cursor:pointer;\">Send the vibe-editing test files<\/label><\/strong><br><span style=\"font-size:13px;color:#666;line-height:1.5;\">Sat or Sun, light admin. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f5cfd4a56ef8185ba70dd9541f40b45\" style=\"color:#4a6fa5;font-weight:600;\">Vibe editing for Doers<\/a><br>Put the base edit (synced, graded, best takes, audio processed) of one old Doers episode in a Google Drive folder, plus the editor's finished version of that same episode if you have it, and send Grok Bot the folder link. Grok Bot makes an AI rough cut on its computer so you can compare.<\/span><\/td><\/tr>\n  <\/table>\n<\/td><\/tr>\n\n<tr><td style=\"padding:16px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Research -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 4px 0;font-size:18px;color:#2b2b2b;\">🔎 Research Block<\/h2>\n  <p style=\"margin:0 0 10px 0;font-size:13px;line-height:1.5;color:#8a8a8a;\">A research read for Sunday afternoon. Every bookmark from your <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eecfd4a56ef813798d4db7d5f99f80b\" style=\"color:#4a6fa5;font-weight:600;\">bookmarks list<\/a> (27 saved since Sep 28, refreshed Oct 9) and <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eecfd4a56ef815ab2c4f879c118edcc\" style=\"color:#4a6fa5;font-weight:600;\">last week's list<\/a> (40, read Sep 28), with how or if each one applies to the job search, Doers and life. Nothing here is a task.<\/p><\/td><\/tr>"}}, "2026-10-12": {"kind": "planned", "days": [{"date": "2026-10-12", "kind": "work", "steps": [{"id": "w41-wed-doers-trailer", "b": "doers", "t": "Channel trailer script", "e": "creative", "time": "", "body": "Rolled from Wednesday. The script comes first on the <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef81fa818acc43d8cead05\" style=\"color:#d08a00;font-weight:600;\">Doers Launch Checklist<\/a>, before filming and editing. Work from <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef814cba5ffff9a7d1e2ea\" style=\"color:#d08a00;font-weight:600;\">Material + Script v1<\/a>: what the show is and what the brand stands for, ending with a follow-and-rate ask. <strong>Done when:<\/strong> the trailer script is final and ready to film.", "date": "2026-10-12", "from": "Thu", "hops": 2, "origin": "Wed", "block": "b04cfd4a56ef8349976c018958507631"}, {"id": "w41-tue-doers-spotify", "b": "doers", "t": "Spotify launch plan", "e": "creative", "time": "", "body": "Third try, so it goes early while the trailer is fresh. Sunday Systems flags this as worthwhile for the system and sustainability. Sketch a one page launch plan for Doers on Spotify for Creators: what goes up first (the 15 back episodes once their final files are in Drive) and how it ties to the channel trailer so listeners can leave five star reviews early. If 40 minutes isn't enough, an outline counts. <strong>Done when:<\/strong> the one page plan (or a full outline) is written.", "date": "2026-10-12", "from": "Thu", "hops": 3, "origin": "Tue", "block": "667cfd4a56ef836f8c3f01e9dbc394da"}, {"id": "w41-thu-doers-hours", "b": "doers", "t": "Hours budget", "e": "creative", "time": "", "body": "From Sunday Systems: meditate on the right balance of learning, studying, and researching versus producing. If you have to read an entire book before making a video, that's too slow and too much work. How many hours a week can you spend on Doers and sustain for the next two years alongside a full-time job? <strong>Done when:<\/strong> one weekly hours number is written down, split into research and production.", "date": "2026-10-12", "from": "Thu", "hops": 1, "origin": "Thu", "block": "8accfd4a56ef8353adb78133e368a67b"}, {"id": "w41-thu-doers-bookmarks", "b": "doers", "t": "X bookmarks: where would AI interns go", "e": "creative", "time": "", "body": "From Sunday Systems: go through your X bookmarks. If you had interns, where would you apply them? Identify the limiting factors. Use the list under \"Addressing the Limiting Factor\" (sponsorships, expand to X, a TikTok editor, the Reading List lead magnet) as the frame. <strong>Done when:<\/strong> a short list of jobs an intern (or bot) would take, plus the single biggest limiting factor.", "date": "2026-10-12", "from": "Thu", "hops": 1, "origin": "Thu", "block": "89bcfd4a56ef83fd8a1d01191911d78a"}, {"id": "w41-thu-doers-team", "b": "doers", "t": "Deploy a full Grok Bot team", "e": "creative", "time": "", "body": "The sub-task under the bookmarks research. Using the intern list you just made, sketch the Grok Bot team: which jobs the bots you already have cover (Pre-Production for episode prep, Desk for the newsletter) and which gaps need a new bot. Pick the first new one to stand up. <strong>Done when:<\/strong> a roster with one job per bot, and the first new bot chosen.", "date": "2026-10-12", "from": "Thu", "hops": 1, "origin": "Thu", "block": "3f0cfd4a56ef807e8634f308e75a4aa0"}, {"id": "w41-thu-doers-os", "b": "doers", "t": "New system for running Doers", "e": "creative", "time": "", "body": "From Sunday Systems: come up with a new system for running this business. Start from the hours number and the bot roster you made this morning, and keep it to the first version (not Starship on day one). <strong>Done when:<\/strong> a one page sketch of the weekly rhythm: what you do, what the bots do, and when.", "date": "2026-10-12", "from": "Thu", "hops": 1, "origin": "Thu", "block": "3f0cfd4a56ef8003b1fae4128a6b5a1e"}, {"id": "w41-thu-job-apply", "b": "job", "t": "Submit the EliseAI application, then send the note", "e": "admin", "time": "", "body": "On the train. Step 8. The note in your shape: three bullets, one ask, the link in the third. A gift, not a critique. Submit the normal application on <a target=\"_blank\" rel=\"noopener\" href=\"https://jobs.ashbyhq.com/EliseAI/f0c8d0af-8021-4a04-b0f9-de1baff48ee4\" style=\"color:#2563b8;font-weight:600;\">Ashby<\/a> first, then send the note the same day. The assistant never sends either. Tell it when both are done (Stage: Applied and sent). Step 9, one bump four days later, lands next week (Mon Oct 12 at the earliest). If the write-up isn't ready, don't rush it; this moves to next week. <strong>Done when:<\/strong> application submitted and note sent, both today.", "date": "2026-10-12", "from": "Thu", "hops": 1, "origin": "Thu", "block": "3f1cfd4a56ef81d18bb6fbafbaeefa76"}, {"id": "w41-tue-ghd-fleetstar", "b": "ghd", "t": "Fleetstar | Webflow Scribes (14 standard + events)", "e": "admin", "time": "", "body": "Scripts and Ian's sheet are in. Test capture is still waiting on Ian's sandbox site answer (no reply as of this morning). For Ian's Oct 13, 2pm meeting. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f2cfd4a56ef81b5911fe7bc7a26d4e4\" style=\"color:#0f8b8d;font-weight:600;\">Tracker<\/a>", "date": "2026-10-12", "from": "Thu", "hops": 3, "origin": "Tue", "block": "5a7ae66e0ebc447bab9eca83a9ed5479"}, {"id": "w41-tue-ghd-union", "b": "ghd", "t": "Union (NEJB) | Webflow Scribes (14 standard + 4 client-specific)", "e": "admin", "time": "", "body": "Same scripts. Capture starts after the Fleetstar test is approved.", "date": "2026-10-12", "from": "Thu", "hops": 3, "origin": "Tue", "block": "0c798e7375cb4f40a8a629b95c5098bf"}, {"id": "w41-wed-doers-masters", "b": "doers", "t": "Doers: find the final video files for 15 episodes", "e": "admin", "time": "", "body": "Rolled from Wednesday. If the drives are with you on the train, do it here; if not, it moves to Monday. Find the exact final uploads (not drafts) on your local drives and put them in the <a href=\"https://drive.google.com/drive/folders/1UF5bdYnMFoA0o8G_87gTiS9XAtI4AWw2\" target=\"_blank\" rel=\"noopener\" style=\"color:#d08a00;font-weight:600;\">Doers Drive folder<\/a> so they can go up on Spotify for Creators. Drive only has V1 drafts of six of these, so use the final versions from your local drives.<span style=\"display:block;margin:8px 0 2px 0;font-weight:700;color:#2b2b2b;\">Search by exact filename (7)<\/span><span style=\"display:block;padding-left:4px;font-size:12px;line-height:1.6;\">&bull; The Best Mental Model For Time Management (Feb 3, 2025): <code>250126 - The Eisenhower Matrix V2.mov<\/code><br>&bull; A Better Bedtime Routine With Marcus Aurelius and ChatGPT: <code>Dante Borgese Video 2.mp4<\/code><br>&bull; How to Escape the Middle and Find Meaning: <code>Dante Borgese Video 4.mp4<\/code><br>&bull; 3 Clients Every Freelancer Must Know!: <code>Dante Borgese Video 6.1.mp4<\/code><br>&bull; 3 Simple Rules Jeff Bezos Used To Build Amazon: <code>Dante Borgese Video 7.1.mp4<\/code><br>&bull; How to Remove Friction From Your Life (Process Maps Explained): <code>Dante Borgese Video 8.mp4<\/code><br>&bull; 4 Books I Re-Read Every Year (and Why You Should Too): <code>250709 - 4 Books I Re-Read Every Year (and Why You Should Too) Final.mov<\/code><\/span><span style=\"display:block;margin:8px 0 2px 0;font-weight:700;color:#2b2b2b;\">Search by title and date (8)<\/span><span style=\"display:block;margin:0 0 2px 0;font-size:12px;\">Files are named <code>YYMMDD - Title.mov<\/code>; pick the one marked Final or the highest V#.<\/span><span style=\"display:block;padding-left:4px;font-size:12px;line-height:1.6;\">&bull; Endure Anything: Nietzsche Meets Harry Potter (Jan 27, 2025)<br>&bull; The 9 Powerful Mental Models Used By History's Greatest Minds (Feb 11, 2025)<br>&bull; Why Discipline Isn't Enough | Shane Parrish (Feb 20, 2025)<br>&bull; The MVP Strategy That Built Airbnb (May 30, 2025)<br>&bull; How I Map My Week to Stay Sane and Productive (Jun 6, 2025)<br>&bull; A Simple Habit to Improve Focus (with Tom Brady and Steve Jobs) (Jun 15, 2025)<br>&bull; What Seth Godin Taught Me About Quitting Smart (Jun 22, 2025)<br>&bull; 3 Psychological Traits of a Modern-Day Gladiator (Jul 7, 2025)<\/span><span style=\"display:block;margin-top:8px;\"><strong>Done when:<\/strong> all 15 final files are in the Doers Drive folder.<\/span>", "date": "2026-10-12", "from": "Thu", "hops": 2, "origin": "Wed", "block": "3f3cfd4a56ef81fbaf79e89e4f77723c"}, {"id": "q-2026-10-12-f7317a11", "b": "doers", "t": "Doers launch: OK the cover art upload and the backdating test", "e": "admin", "time": "", "body": "Doers Distribution uploads the new 3000x3000 cover art in Spotify for Creators and tests backdating on one draft once you OK both. Optional: add Substack as the show's website link (you or Doers Distribution). <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef81fa818acc43d8cead05\" style=\"color:#d08a00;font-weight:600;\">Doers Launch Checklist<\/a>", "date": "2026-10-12"}, {"id": "q-2026-10-12-5a2583bc", "b": "doers", "t": "Doers launch: pick the show's public RSS contact email", "e": "admin", "time": "", "body": "It becomes public once RSS is on, so pick the address you want listeners to see. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef81fa818acc43d8cead05\" style=\"color:#d08a00;font-weight:600;\">Doers Launch Checklist<\/a>", "date": "2026-10-12"}], "ghosts": []}, {"date": "2026-10-13", "kind": "work", "steps": [{"id": "q-2026-10-12-024c529a", "b": "doers", "t": "Film the Doers trailer", "e": "creative", "time": "", "body": "After the script: what the show is and what the brand stands for, ending with a follow-and-rate ask. Not waiting on script approval. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef81fa818acc43d8cead05\" style=\"color:#d08a00;font-weight:600;\">Doers Launch Checklist<\/a>", "date": "2026-10-13"}], "ghosts": []}, {"date": "2026-10-14", "kind": "work", "steps": [{"id": "q-2026-10-12-9a77605a", "b": "doers", "t": "Wave 1 follow-ups: Lovable (Danielle) and Audible (Lawrence) if no reply", "e": "admin", "time": "", "body": "Only if they haven't replied. Drafts in the Doers Sponsor Pipeline.", "date": "2026-10-14"}, {"id": "q-2026-10-12-a865c75f", "b": "doers", "t": "Wave 2 warm intro asks: Ramp, Oura, AG1, Eight Sleep", "e": "admin", "time": "", "body": "Ramp via Kate Palozzola or Seth Jacobs (both 1st-degree). Oura via Merissa Goodrich to Sanya D. AG1 via Josh Belinsky to Emily M. Eight Sleep via Sam Nance to Judith Aldabo. Drafts in the Doers Sponsor Pipeline; you send.", "date": "2026-10-14"}, {"id": "q-2026-10-12-2642938b", "b": "doers", "t": "Edit the Doers trailer", "e": "creative", "time": "", "body": "Finish the cut. Once it's edited: set the launch date, Desk and you draft the newsletter, and Doers Distribution drafts the personal text. <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3f3cfd4a56ef81fa818acc43d8cead05\" style=\"color:#d08a00;font-weight:600;\">Doers Launch Checklist<\/a>", "date": "2026-10-14"}], "ghosts": []}, {"date": "2026-10-15", "kind": "work", "steps": [{"id": "q-2026-10-12-8569efb2", "b": "doers", "t": "Wave 2: send Musicbed (Crystal Henry) directly", "e": "admin", "time": "", "body": "Draft in the Doers Sponsor Pipeline; you send.", "date": "2026-10-15"}], "ghosts": []}, {"date": "2026-10-16", "kind": "off", "steps": [], "ghosts": []}, {"date": "2026-10-17", "kind": "weekend", "steps": [], "ghosts": []}, {"date": "2026-10-18", "kind": "weekend", "steps": [], "ghosts": []}]}, "2026-09-28": {"kind": "history-weekend", "days": [{"date": "2026-09-28", "kind": "work", "steps": [], "ghosts": []}, {"date": "2026-09-29", "kind": "work", "steps": [], "ghosts": []}, {"date": "2026-09-30", "kind": "work", "steps": [], "ghosts": []}, {"date": "2026-10-01", "kind": "work", "steps": [], "ghosts": []}, {"date": "2026-10-02", "kind": "off", "steps": [], "ghosts": []}, {"date": "2026-10-03", "kind": "weekend", "steps": [], "ghosts": []}, {"date": "2026-10-04", "kind": "weekend", "steps": [], "ghosts": []}], "weekend": {"path": "/weekend-briefs/d9c64916b6da/2026-10-03.html", "sat": "2026-10-03", "html": "<!-- One line -->\n<tr><td style=\"padding:20px 28px 4px 28px;\">\n  <p style=\"margin:0 0 6px 0;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8a8a;\">One line to rule the weekend<\/p>\n  <p style=\"margin:0;font-size:17px;line-height:1.45;font-weight:600;color:#1f3a5f;\">Ride the Tour de Bronx Sunday morning (8 AM start). Showers are possible after 11am.<\/p>\n<\/td><\/tr>\n\n<tr><td style=\"padding:16px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Weather -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 12px 0;font-size:18px;color:#2b2b2b;\">🌤️ Weekend Weather<\/h2>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n  <tr>\n    <td class=\"col\" width=\"50%\" valign=\"top\" style=\"padding:0 6px 10px 0;\">\n      <div style=\"background-color:#eef6ff;border-radius:10px;padding:14px;\">\n        <p style=\"margin:0;font-size:12px;font-weight:700;color:#4a6fa5;text-transform:uppercase;letter-spacing:1px;\">Saturday · Oct 3<\/p>\n        <p style=\"margin:6px 0 2px 0;font-size:28px;font-weight:700;color:#1f3a5f;\">☀️ 71° <span style=\"font-size:16px;font-weight:500;color:#6b7c93;\">/ 56°<\/span><\/p>\n        <p style=\"margin:0 0 8px 0;font-size:14px;color:#2b2b2b;\">Sunny, then mostly clear<\/p>\n        <p style=\"margin:0;font-size:13px;color:#555;line-height:1.6;\">💧 Rain: <strong>0%<\/strong><br>💨 Wind: <strong>NE 5-9 mph<\/strong><\/p>\n      <\/div>\n    <\/td>\n    <td class=\"col\" width=\"50%\" valign=\"top\" style=\"padding:0 0 10px 6px;\">\n      <div style=\"background-color:#f1f3f5;border-radius:10px;padding:14px;\">\n        <p style=\"margin:0;font-size:12px;font-weight:700;color:#6b7c93;text-transform:uppercase;letter-spacing:1px;\">Sunday · Oct 4<\/p>\n        <p style=\"margin:6px 0 2px 0;font-size:28px;font-weight:700;color:#1f3a5f;\">🌦️ 64° <span style=\"font-size:16px;font-weight:500;color:#6b7c93;\">/ 57°<\/span><\/p>\n        <p style=\"margin:0 0 8px 0;font-size:14px;color:#2b2b2b;\">Partly sunny, chance of showers after 11am<\/p>\n        <p style=\"margin:0;font-size:13px;color:#555;line-height:1.6;\">💧 Rain: <strong>50%<\/strong> (0.10-0.25 in)<br>💨 Wind: <strong>E ~8 mph<\/strong><\/p>\n      <\/div>\n    <\/td>\n  <\/tr>\n  <\/table>\n  <p style=\"margin:4px 0 0 0;font-size:14px;line-height:1.5;color:#2b2b2b;\">→ <strong>Takeaway:<\/strong> Saturday is dry and 71°F. Sunday is a morning ride: be on the bike early, since showers are possible <strong>after 11am<\/strong>, and save indoor chores for the afternoon.<\/p>\n  <p style=\"margin:6px 0 0 0;font-size:11px;color:#9a9a9a;\">Source: <a target=\"_blank\" rel=\"noopener\" href=\"https://forecast.weather.gov/MapClick.php?lat=40.7831&amp;lon=-73.9712\" style=\"color:#9a9a9a;\">National Weather Service, Central Park NYC<\/a>, issued Oct 3, 2026 ~8:28 AM ET.<\/p>\n<\/td><\/tr>\n\n<tr><td style=\"padding:20px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Chores -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 4px 0;font-size:18px;color:#2b2b2b;\">🧺 Chores<\/h2>\n  <p style=\"margin:0 0 10px 0;font-size:13px;color:#8a8a8a;\">Quadrant 3 · 5 items<\/p>\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"font-size:15px;line-height:1.4;\">\n    <tr><td width=\"36\" valign=\"top\" style=\"padding:7px 0;\"><input type=\"checkbox\" id=\"item-0\" data-item=\"0\" aria-label=\"Mark item 1 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\" data-notion-block=\"3f0cfd4a-56ef-8139-9bfc-eeede18aee42\"><\/td><td data-text=\"0\" style=\"padding:7px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-0\" style=\"cursor:pointer;\">Vacuum<\/label><\/strong><br><span style=\"font-size:13px;color:#777;\">Sun afternoon, indoors while it rains<\/span><\/td><\/tr>\n    <tr><td width=\"36\" valign=\"top\" style=\"padding:7px 0;\"><input type=\"checkbox\" id=\"item-1\" data-item=\"1\" aria-label=\"Mark item 2 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\" data-notion-block=\"3f0cfd4a-56ef-81c4-89df-dc60c0e3933a\"><\/td><td data-text=\"1\" style=\"padding:7px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-1\" style=\"cursor:pointer;\">Clean surfaces<\/label><\/strong><br><span style=\"font-size:13px;color:#777;\">Sun afternoon, indoors while it rains<\/span><\/td><\/tr>\n    <tr><td width=\"36\" valign=\"top\" style=\"padding:7px 0;\"><input type=\"checkbox\" id=\"item-2\" data-item=\"2\" aria-label=\"Mark item 3 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\" data-notion-block=\"3f0cfd4a-56ef-8148-a8f6-e37592aa96c9\"><\/td><td data-text=\"2\" style=\"padding:7px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-2\" style=\"cursor:pointer;\">Laundry<\/label><\/strong><br><span style=\"font-size:13px;color:#777;\">Sun afternoon, indoors while it rains<\/span><\/td><\/tr>\n    <tr><td width=\"36\" valign=\"top\" style=\"padding:7px 0;\"><input type=\"checkbox\" id=\"item-3\" data-item=\"3\" aria-label=\"Mark item 4 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\" data-notion-block=\"3f0cfd4a-56ef-8114-95b0-fad5cb9b2df8\"><\/td><td data-text=\"3\" style=\"padding:7px 0;border-bottom:1px solid #f0eee9;\"><strong><label for=\"item-3\" style=\"cursor:pointer;\">Grocery shopping<\/label><\/strong><br><span style=\"font-size:13px;color:#777;\">Sat evening, so Sunday morning is free for the ride<\/span>\n      <div data-grocery-mount style=\"margin:6px 0 0 0;\"><\/div>\n\n    <\/td><\/tr>\n    <tr><td width=\"36\" valign=\"top\" style=\"padding:7px 0;\"><input type=\"checkbox\" id=\"item-7\" data-item=\"7\" aria-label=\"Mark item 8 done\" style=\"width:24px;height:24px;margin:0 8px 0 0;accent-color:#1f3a5f;cursor:pointer;vertical-align:top;\" data-notion-block=\"3f0cfd4a-56ef-8195-9477-dbf0b15cd976\"><\/td><td data-text=\"7\" style=\"padding:7px 0;\"><strong><label for=\"item-7\" style=\"cursor:pointer;\">Donate clothes<\/label><\/strong><br><span style=\"font-size:13px;color:#777;\">Sun afternoon, after the ride. Bag up clothes you no longer wear and drop them at a donation spot.<\/span>\n      <p style=\"margin:8px 0 0 0;font-size:13px;line-height:1.5;color:#2b2b2b;\"><strong>Recommended:<\/strong> Goodwill NYNJ Mini Shop &amp; Donation Drop, 1496 1st Ave (E 78th/79th), about 10 min walk. Daily 10 AM to 6 PM per third-party listings (unconfirmed). No appointment, tax receipt on request. Go before 2:30 PM or after 3:30 PM (thin staffing). (646) 374-0269. <a target=\"_blank\" rel=\"noopener\" href=\"https://goodwillnynj.org/locations/ny/78thSt\" style=\"color:#4a6fa5;font-weight:600;\">Location page<\/a><\/p>\n      <p style=\"margin:8px 0 2px 0;font-size:12px;font-weight:700;color:#555;\">Other options<\/p>\n      <ul style=\"margin:0;padding-left:18px;font-size:13px;line-height:1.5;color:#555;\">\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://shop.housingworks.org/nyc-thrift-shop/yorkville/\" style=\"color:#4a6fa5;font-weight:600;\">Housing Works Thrift Shop Yorkville<\/a>, 1730 2nd Ave at E 90th, about 17 min walk. Sun 12 to 5 PM, Mon to Sat 11 to 7. Takes clothing, shoes, accessories, housewares, books (2 box cap). No electronics, strollers or mattresses.<\/li>\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://shop.housingworks.org/nyc-thrift-shop/2nd-ave-64th/\" style=\"color:#4a6fa5;font-weight:600;\">Housing Works Thrift Shop<\/a>, 1222 2nd Ave at E 64th, about 19 min walk. Same hours, no furniture.<\/li>\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://goodwillnynj.org\" style=\"color:#4a6fa5;font-weight:600;\">Goodwill NYNJ Store &amp; Donation Center<\/a>, 1114 1st Ave at E 61st, about 21 min walk. Daily 11 AM to 7 PM per third-party listings (unconfirmed).<\/li>\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://www.salvationarmyusa.org/usa-eastern-territory/greater-new-york/donation-dropoff/\" style=\"color:#4a6fa5;font-weight:600;\">Salvation Army<\/a> pickup, not Sunday drop-off. 536 W 46th St is closed Sundays and far. Clothing pickup: 1-800-728-7825.<\/li>\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://grownyc.org/locations/79th-street-greenmarket/\" style=\"color:#4a6fa5;font-weight:600;\">GrowNYC 79th Street Greenmarket<\/a> (Columbus Ave, UWS) Sunday clothing collection 9 AM to 12 PM only, so over by afternoon.<\/li>\n        <li style=\"margin:0 0 5px 0;\"><a target=\"_blank\" rel=\"noopener\" href=\"https://www.wearablecollections.com/buildings\" style=\"color:#4a6fa5;font-weight:600;\">Wearable Collections<\/a>: bins only for buildings with 100+ units. Ask your building.<\/li>\n      <\/ul>\n      <p style=\"margin:4px 0 0 0;font-size:12px;line-height:1.5;color:#777;\"><strong>Skip these (closed):<\/strong> Housing Works 202 E 77th (2018), Goodwill 1704 2nd Ave (2024), MSK thrift 1440 3rd Ave (2016), Council Thrift 246 E 84th (likely closed, unconfirmed). Bring clean, bagged clothes. Distances are estimates; hours from third-party listings are unconfirmed.<\/p>\n    <\/td><\/tr>\n  <\/table>\n<\/td><\/tr>\n\n<tr><td style=\"padding:16px 28px 0 28px;\"><div style=\"height:1px;background-color:#e8e5de;\"><\/div><\/td><\/tr>\n\n<!-- Research -->\n<tr><td style=\"padding:20px 28px 0 28px;\">\n  <h2 style=\"margin:0 0 4px 0;font-size:18px;color:#2b2b2b;\">🔎 Research Block<\/h2>\n  <p style=\"margin:0 0 8px 0;font-size:13px;color:#8a8a8a;\">30-45 min · 3 picks from your <a target=\"_blank\" rel=\"noopener\" href=\"https://app.notion.com/p/3eecfd4a56ef815ab2c4f879c118edcc\" style=\"color:#4a6fa5;\">X bookmarks list<\/a> (40 newest bookmarks, read Sep 28), chosen for new ways to put AI and tech to work in everyday life<\/p><\/td><\/tr>"}}}, "grocery": [{"id": "g01", "label": "Plastic wrap", "checked": false}, {"id": "g02", "label": "Broccoli", "checked": false}, {"id": "g03", "label": "Zucchini", "checked": false}, {"id": "g04", "label": "Eggs", "checked": false}, {"id": "g05", "label": "Spinach", "checked": false}, {"id": "g06", "label": "Mushrooms", "checked": false}, {"id": "g07", "label": "Banana", "checked": false}, {"id": "g08", "label": "Cheese for eggs", "checked": false}, {"id": "g09", "label": "Bread", "checked": false}, {"id": "g10", "label": "Jam", "checked": false}]};
+const SYNC=(DATA.sync_url||"").replace(/\/$/,""), B=DATA.buckets, QS=new URLSearchParams(location.search);
+/* ---------- dates ---------- */
+const etToday=()=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+const TODAY=/^\d{4}-\d{2}-\d{2}$/.test(QS.get("today")||"")?QS.get("today"):etToday();
+const pd=s=>{const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const add=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return iso(d)};
+const DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],DL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const md=s=>{const d=pd(s);return (d.getMonth()+1)+"/"+d.getDate()};
+const lab=s=>DN[pd(s).getDay()]+" "+md(s);
+const mondayOf=s=>{const d=pd(s);d.setDate(d.getDate()-(d.getDay()+6)%7);return iso(d)};
+const THIS=mondayOf(TODAY);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const plain=h=>{const t=document.createElement("div");t.innerHTML=h||"";return (t.textContent||"").replace(/\s+/g," ").trim()};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+
+/* ---------- state ---------- */
+let outbox=LS.get("brief2:outbox",[]), mine=LS.get("brief2:mine",[]).filter(e=>Date.now()-(e.acked||0)<30*60e3);
+let serverEvents=[], notionState={}, webhookState=null, syncMode=SYNC?"ok":"local";
+const weekendParsed={};
+let wk=THIS, sel=TODAY, editHist=false;
+(function hashGo(){const h=location.hash.slice(1);if(/^\d{4}-\d{2}-\d{2}$/.test(h)){wk=mondayOf(h);sel=h}})();
+
+/* ---------- weekend page parser (Weekend Chore Bot's published HTML) ---------- */
+function wxCode(t){return /☀/.test(t)?0:/⛅|🌤|🌥/.test(t)?2:/🌧|🌦|⛈|🌨|☔/.test(t)?61:/☁/.test(t)?3:2}
+function parseWeekend(html,path,sat){
+  const doc=new DOMParser().parseFromString(html,"text/html"),sun=add(sat,1);
+  const P=[...doc.querySelectorAll("p")];
+  const out={oneline:"",wx:{},means:"",steps:[],read:null,path};
+  const ol=P.find(p=>/one line to rule/i.test(p.textContent));
+  if(ol&&ol.nextElementSibling)out.oneline=ol.nextElementSibling.textContent.trim();
+  P.filter(p=>/^(saturday|sunday)\s*·/i.test(p.textContent.trim())).forEach(p=>{
+    const box=p.parentElement,ps=[...box.querySelectorAll("p")],day=/^sat/i.test(p.textContent.trim())?sat:sun;
+    const tl=ps[1]?ps[1].textContent:"",m=tl.match(/(-?\d+)°\s*\/\s*(-?\d+)°/),rain=(box.textContent.match(/Rain:\s*(\d+)%/)||[])[1];
+    if(m)out.wx[day]=[{city:"New York",code:wxCode(tl),hi:+m[1],lo:+m[2],pop:rain?+rain:0,desc:ps[2]?ps[2].textContent.trim():""}]});
+  const tk=P.find(p=>/^takeaway:/i.test(p.textContent.trim()));if(tk)out.means=tk.textContent.replace(/^takeaway:\s*/i,"").trim();
+  doc.querySelectorAll('input[type="checkbox"][data-item]').forEach(inp=>{
+    const item=inp.getAttribute("data-item"),cell=doc.querySelector('[data-text="'+item+'"]')||inp.closest("tr");
+    if(!cell)return;
+    const lbl=cell.querySelector("label")||cell.querySelector("strong"),title=(lbl?lbl.textContent:cell.textContent).trim();
+    const c2=cell.cloneNode(true);const st=c2.querySelector("strong");if(st)st.remove();
+    let body=c2.innerHTML.replace(/^\s*(<br\s*\/?>\s*)+/i,"").trim();
+    const txt=plain(body),m=txt.match(/\b(Sat|Sun)/);
+    const s={id:"wk-"+sat+"-"+item,b:"chores",t:title,e:"x",time:"",body,date:m&&m[1]==="Sun"?sun:sat,lsKey:"wb:"+path+":"+item,weekend:true};
+    const blk=inp.getAttribute("data-notion-block");if(blk)s.block=blk.replace(/-/g,"").toLowerCase();
+    if(/in progress/i.test(txt.slice(0,40)))s.badge="In progress";
+    out.steps.push(s)});
+  const rh=[...doc.querySelectorAll("h2")].find(h=>/research/i.test(h.textContent));
+  if(rh){const p=rh.nextElementSibling;out.read={t:rh.textContent.replace(/^\W+/,"").trim(),s:p?plain(p.innerHTML).slice(0,170):"",url:path+"#research"}}
+  return out;
+}
+function weekendFor(mon){
+  if(weekendParsed[mon])return weekendParsed[mon];
+  const w=DATA.weeks[mon]&&DATA.weeks[mon].weekend;if(!w)return null;
+  try{weekendParsed[mon]=parseWeekend(w.html,w.path,w.sat)}catch(e){weekendParsed[mon]=null}
+  return weekendParsed[mon];
+}
+async function refreshWeekend(mon){
+  const w=DATA.weeks[mon]&&DATA.weeks[mon].weekend;if(!w||location.protocol!=="https:")return;
+  try{const r=await fetch(w.path+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;weekendParsed[mon]=parseWeekend(await r.text(),w.path,w.sat);render()}catch(e){}
+}
+
+/* ---------- model: base data + change log overlay ---------- */
+function baseSteps(){
+  const out=[];
+  for(const [mon,w] of Object.entries(DATA.weeks)){
+    for(const d of w.days)for(const s of d.steps)out.push(Object.assign({},s));
+    const we=weekendFor(mon);if(we)we.steps.forEach(s=>out.push(Object.assign({},s)));
+  }
+  return out;
+}
+function allEvents(){
+  const seen=new Set(),evs=[];
+  for(const e of [...serverEvents,...mine,...outbox]){if(seen.has(e.client_id))continue;seen.add(e.client_id);evs.push(e)}
+  return evs.sort((a,b)=>a.ts<b.ts?-1:a.ts>b.ts?1:0);
+}
+let MODEL=null;
+function buildModel(){
+  const steps=baseSteps(),byId=new Map(steps.map(s=>[s.id,s])),del=new Set();
+  for(const e of allEvents()){
+    let s=byId.get(e.task_id);
+    if(e.action==="add"&&!s&&e.new_day){s={id:e.task_id,b:e.bucket||"admin",t:e.title,e:e.energy||"creative",time:"",body:esc(e.notes||""),date:e.new_day,added:true};steps.push(s);byId.set(s.id,s)}
+    if(!s)continue;
+    const ref=e.notion||e.ref_result;if(ref&&ref.id)s.ref={kind:ref.kind,id:ref.id};
+    if(e.action==="edit"){s.t=e.title;if(e.notes_changed)s.body=esc(e.notes||"");if(e.new_day&&e.new_day!==s.date){s.moved=true;s.date=e.new_day;s.time=""}
+      if(e.bucket)s.b=e.bucket;if(e.energy)s.e=e.energy;s.edited=true}
+    else if(e.action==="delete")del.add(s.id);
+    else if(e.action==="restore")del.delete(s.id);
+    else if(e.action==="check")s.evDone=true;
+    else if(e.action==="uncheck")s.evDone=false;
+  }
+  const live=steps.filter(s=>!del.has(s.id)),byDate={};
+  live.forEach(s=>(byDate[s.date]=byDate[s.date]||[]).push(s));
+  MODEL={steps:live,byId:new Map(live.map(s=>[s.id,s])),byDate,deleted:del};
+}
+const blockOf=s=>s.ref&&s.ref.kind==="block"?s.ref.id:(s.block||null);
+const refOf=s=>s.ref||(s.block?{kind:"block",id:s.block}:null);
+function isDone(s){
+  for(let i=outbox.length-1;i>=0;i--){const e=outbox[i];if(e.task_id===s.id&&(e.action==="check"||e.action==="uncheck"))return e.action==="check"}
+  const b=blockOf(s);if(b&&notionState[b]!==undefined)return notionState[b];
+  if(s.evDone!==undefined)return s.evDone;
+  if(s.lsKey){try{if(localStorage.getItem(s.lsKey)==="1")return true}catch(e){}}
+  return !!s.done;
+}
+function weekData(m){
+  const base=DATA.weeks[m]||{kind:"none",days:[]};const days=[];
+  for(let i=0;i<7;i++){const ds=add(m,i),dow=pd(ds).getDay();
+    const bd=base.days.find(x=>x.date===ds)||{};
+    const d=Object.assign({kind:dow===5?"off":(dow===6||dow===0)?"weekend":"work",ghosts:[]},bd,{date:ds});
+    d.steps=(MODEL.byDate[ds]||[]).slice();
+    if(d.kind==="weekend"){const we=weekendFor(m);if(we){d.wx=d.wx&&d.wx.length?d.wx:we.wx[ds];d.means=we.means;d.oneline=d.oneline||we.oneline;if(dow===0)d.read=we.read;d.weekendPath=we.path}}
+    days.push(d)}
+  const s=pd(m),e=pd(add(m,6));
+  const label=MN[s.getMonth()]+" "+s.getDate()+" to "+(s.getMonth()===e.getMonth()?"":MN[e.getMonth()]+" ")+e.getDate();
+  return {label,days,base,history:m<THIS,planned:m>THIS};
+}
+
+/* ---------- sync: change events ---------- */
+let flushT=null,undoT=null;
+function saveQ(){LS.set("brief2:outbox",outbox);LS.set("brief2:mine",mine.slice(-200))}
+function queue(ev){
+  ev.client_id="c"+rid();ev.ts=new Date().toISOString();outbox.push(ev);saveQ();
+  setSync("busy");clearTimeout(flushT);flushT=setTimeout(flush,2500);return ev;
+}
+async function flush(){
+  clearTimeout(flushT);
+  if(!outbox.length){return}
+  if(!SYNC){setSync("local");return}
+  const batch=outbox.slice(0,30);
+  try{
+    const r=await fetch(SYNC+"/changes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({events:batch})});
+    const j=await r.json();if(!r.ok||!j.results)throw new Error(j.error||("HTTP "+r.status));
+    const failed=[];
+    for(const res of j.results){
+      const i=outbox.findIndex(e=>e.client_id===res.client_id);if(i<0)continue;
+      const ev=outbox.splice(i,1)[0];
+      if(res.ok){ev.ref_result=res.ref||null;ev.acked=Date.now();mine.push(ev)}else failed.push(ev.title||ev.task_id);
+    }
+    webhookState=j.webhook;saveQ();buildModel();render();
+    if(failed.length)toast("Couldn't save “"+failed[0].slice(0,30)+"” to Notion");
+    if(outbox.length){flushT=setTimeout(flush,800);return}
+    setSync(j.webhook==="queued"?"bot":"logged");
+    setTimeout(()=>{if(!outbox.length)setSync("ok")},9000);
+    setTimeout(()=>refreshNotion(true),1500);
+  }catch(e){setSync("err");flushT=setTimeout(flush,15000)}
+}
+async function refreshServer(){
+  if(!SYNC)return;
+  try{const after=DATA.log_baked_through?"?after="+encodeURIComponent(DATA.log_baked_through):"";
+    const r=await fetch(SYNC+"/changes"+after);const j=await r.json();if(j.ok){serverEvents=j.events||[];buildModel();render()}}catch(e){}
+}
+let lastNotion=0;
+async function refreshNotion(force){
+  if(!SYNC)return;if(!force&&Date.now()-lastNotion<20000)return;lastNotion=Date.now();
+  const W=weekData(wk);const ids=new Set();
+  W.days.forEach(d=>d.steps.forEach(s=>{const b=blockOf(s);if(b)ids.add(b)}));
+  const arr=[...ids];
+  for(let i=0;i<arr.length;i+=60){
+    try{const r=await fetch(SYNC+"/state?blocks="+arr.slice(i,i+60).join(","));const j=await r.json();
+      if(j.states)for(const[k,v]of Object.entries(j.states))notionState[k]=!!v.checked;
+      if(syncMode==="err"&&!outbox.length)setSync("ok")}catch(e){if(!outbox.length)setSync("err")}
+  }
+  render();
+}
+function setSync(m){syncMode=m;const t={ok:"Synced with Notion",busy:"Saving to Notion…",bot:"Synced · Grok Bot notified",logged:"Synced · logged for Grok Bot",err:"Offline · saved here, retrying",local:"Saved on this device"}[m];
+  const s=$("#sync");s.className="sync "+(m==="ok"?"":m);s.querySelector("span").textContent=t}
+
+/* ---------- grocery (shared with the classic pages: same key + /grocery) ---------- */
+const GK="brief:grocery:v1";
+let groc=LS.get(GK,null)||{items:(DATA.grocery||[]).map(g=>({id:g.id,label:g.label,checked:!!g.checked})),updated:null};
+async function grocPull(){if(!SYNC)return;try{const r=await(await fetch(SYNC+"/grocery")).json();if(r.ok&&r.items&&(r.updated||0)>(groc.updated||0)){groc={items:r.items,updated:r.updated};LS.set(GK,groc);render()}}catch(e){}}
+function grocSave(){groc.updated=Date.now();LS.set(GK,groc);if(SYNC)fetch(SYNC+"/grocery",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(groc)}).then(r=>r.json()).then(r=>{if(r.ok&&r.stale){groc={items:r.items,updated:r.updated};LS.set(GK,groc);render()}}).catch(()=>{})}
+const grocLeft=()=>groc.items.filter(g=>!g.checked).length;
+
+/* ---------- weather ---------- */
+function icon(code){
+  const sun='<circle cx="20" cy="18" r="8" fill="#f6c445"/>';
+  const cloud=(x,y,f)=>`<path d="M${x} ${y}h18a7 7 0 0 0 0-14 9 9 0 0 0-17-2 6 6 0 0 0-1 16z" fill="${f}"/>`;
+  let g;
+  if(code===0||code===1&&false)g='<circle cx="24" cy="24" r="9" fill="#f6c445"/><g stroke="#f6c445" stroke-width="2.5" stroke-linecap="round"><path d="M24 6v4M24 38v4M6 24h4M38 24h4M11 11l3 3M34 34l3 3M11 37l3-3M34 14l3-3"/></g>';
+  else if(code<=2)g=sun+cloud(12,36,"#c9d3df");
+  else if(code<51)g=cloud(9,32,"#b8c4d3");
+  else g=cloud(9,28,"#9fb0c4")+'<g stroke="#5b8fd1" stroke-width="2.5" stroke-linecap="round"><path d="M16 34l-2 6M24 34l-2 6M32 34l-2 6"/></g>';
+  return `<svg viewBox="0 0 48 48">${g}</svg>`;
+}
+const cond=c=>c===0?"Sunny":c<=2?"Partly sunny":c<=3?"Cloudy":c<51?"Foggy":c<70?"Rain":c<80?"Snow":"Showers";
+function means(d){
+  if(d.means)return esc(d.means);const w=d.wx[0];
+  if(d.wx.length>1){const h=[...d.wx].sort((a,b)=>b.hi-a.hi)[0];return `Warmer in ${esc(h.city)} (${h.hi}°).`+(d.wx.every(x=>x.pop<40)?" Dry on both ends.":" Pack an umbrella.")}
+  if(w.pop>=40)return "Bring an umbrella.";
+  if(w.lo<=48)return `Cool start (${w.lo}°), bring a layer.`+(w.pop<20?" Dry all day.":"");
+  if(w.gust>=25)return `Dry, but gusty (${w.gust} mph).`;
+  return "Dry and comfortable.";
+}
+function weatherCal(d){
+  let wx;
+  if(d.wx&&d.wx.length){wx=`<div class="wx ${d.kind==="weekend"?"we":""}"><div class="wxs ${d.wx.length>1?"two":""}">`+d.wx.map(w=>{const L=Math.max(0,(w.lo-30)/65*100),R=Math.min(100,(w.hi-30)/65*100);
+    return `<div class="wxc"><div class="city">${esc(w.city)}</div><div class="t">${icon(w.code)}<div><b>${w.hi}°</b> <span>/ ${w.lo}°</span><div style="font-size:12.5px;color:#4b5563">${esc(w.desc||cond(w.code))}</div></div></div>
+    <div class="tbar"><i style="left:${L}%;width:${Math.max(2,R-L)}%"></i></div><div class="rain">💧 ${w.pop}% <div class="rb"><i style="width:${w.pop}%"></i></div></div></div>`}).join("")+`</div><div class="means"><b>What it means:</b> ${means(d)}</div></div>`}
+  else wx=`<div class="wx"><div class="city" style="font-size:10.5px;font-weight:800;letter-spacing:.8px;color:#a87600">WEATHER</div><div style="font-size:13.5px;color:#4b5563;margin-top:6px">${d.date<TODAY?"Not saved for this day.":"The forecast fills in about a week out."}</div></div>`;
+  const ev=d.cal||[];
+  if(d.kind==="weekend"&&!ev.length)return `<div class="wc" style="grid-template-columns:1fr">${wx}</div>`;
+  const cal=`<div class="cal"><div class="label" style="color:#2f5b8f">Calendar</div>${ev.length?ev.map(e=>`<div class="ev"><span class="tm">${esc(e.tm)}</span><span>${e.url?`<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.t)}</a>`:esc(e.t)}</span></div>`).join(""):`<div class="empty">${esc(d.calNote||(d.date>TODAY?"Nothing booked yet.":"Nothing on the calendar."))}</div>`}</div>`;
+  return `<div class="wc">${wx}${cal}</div>`;
+}
+
+/* ---------- render ---------- */
+function lighten(c){return({"#2563b8":"#8fb6f0","#c0583a":"#f0a58e","#0f8b8d":"#6fd3d4","#d08a00":"#f6c445","#7a4cb8":"#c3a6ee","#2f7d4f":"#9ee0ad"})[c]||"#cbd5e1"}
+const bk=k=>B[k]||B.admin||{l:k,c:"#64748b",t:"#e5e9ef"};
+function grade(p){return p>=.95?"A+":p>=.85?"A":p>=.7?"B":p>=.5?"C":"Go"}
+function render(){
+  if(!MODEL)return;
+  const W=weekData(wk);
+  $("#wkLabel").textContent=W.label;
+  $("#wkSub").textContent=wk===THIS?"This week":W.history?"Looking back":"Coming up";
+  $("#jump").classList.toggle("show",wk!==THIS);
+  document.title="Brief · "+W.label;
+  $("#strip").innerHTML=W.days.map(d=>{const dt=pd(d.date);let dots;
+    if(d.kind==="off"&&!d.steps.length)dots='<span class="offtag">off</span>';
+    else{const items=d.steps.map(s=>({c:bk(s.b).c,cls:isDone(s)?"f":s.from?"r":""})).concat(d.ghosts.map(g=>({c:bk(g.b).c,cls:"g"})));
+      dots='<div class="dots">'+items.slice(0,10).map(x=>`<i class="dot ${x.cls}" style="color:${d.kind==="weekend"?"#9ee0ad":lighten(x.c)}"></i>`).join("")+"</div>"+(items.length>10?`<span class="more">+${items.length-10}</span>`:"")}
+    return `<button class="d ${d.kind==="weekend"?"we":""} ${d.date===TODAY?"today":""} ${d.date===sel?"sel":""} ${d.date<TODAY?"past":""}" data-d="${d.date}"><span class="dn">${DN[dt.getDay()]}</span><span class="dd">${dt.getDate()}</span>${dots}</button>`}).join("");
+  $("#strip").querySelectorAll(".d").forEach(b=>b.onclick=()=>{sel=b.dataset.d;history.replaceState(null,"","#"+sel);render()});
+  renderMeter(W);renderDay(W);renderFoot(W);
+}
+function renderMeter(W){
+  const wd=W.days.filter(d=>d.kind!=="weekend"),we=W.days.filter(d=>d.kind==="weekend");
+  const work=wd.flatMap(d=>d.steps),carry=wd.flatMap(d=>d.ghosts.filter(g=>g.carry));
+  const cDone=carry.filter(g=>{const s=MODEL.byId.get(g.of);return s&&isDone(s)}).length;
+  const n=work.length+carry.length,done=work.filter(isDone).length+cDone;
+  const rolled=work.filter(s=>s.from&&!isDone(s)).length+carry.length-cDone;
+  const wks=we.flatMap(d=>d.steps),wn=wks.length,wdn=wks.filter(isDone).length,p=n?done/n:0;
+  const per={};
+  const tally=(b,isD,isR)=>{const v=per[b]=per[b]||{n:0,d:0,r:0};v.n++;if(isD)v.d++;else if(isR)v.r++};
+  work.forEach(s=>tally(s.b,isDone(s),!!s.from));carry.forEach(g=>{const s=MODEL.byId.get(g.of);tally(g.b,s&&isDone(s),true)});wks.forEach(s=>tally(s.b,isDone(s),false));
+  if(!n&&!wn){$("#meter").innerHTML=`<div class="mtop"><b>${W.history?"No brief that week":"Nothing planned yet"}</b><span>${W.history?"":"add a task to any day"}</span></div>`;return}
+  let head=W.history?`<b>${done} of ${n} work steps</b><span>final</span>`:W.planned?`<b>${n} work step${n===1?"":"s"} planned</b><span>${done} banked early</span>`:`<b>${done} of ${n} work steps</b><span>Mon to Fri</span>`;
+  let note="";
+  if(!W.planned&&!W.history&&rolled)note=`<div class="mnote">↩ ${rolled} rolled step${rolled===1?"":"s"} waiting, a fresh shot ${carry.length?"next week":"today"}.</div>`;
+  if(W.planned)note=`<div class="mnote" style="color:#6b7280">Ticking early counts toward this week.</div>`;
+  const ring=wn?`<div class="wkp"><svg width="22" height="22" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="#d3eddc" stroke-width="5"/><circle cx="18" cy="18" r="15" fill="none" stroke="#2f7d4f" stroke-width="5" stroke-dasharray="${wdn/wn*94.2} 94.2" transform="rotate(-90 18 18)"/></svg><span><b>Weekend</b> ${wdn} of ${wn} chores${wdn===0&&!W.history?" · no rush":""}</span></div>`:"";
+  const keys=Object.keys(B).filter(k=>per[k]).concat(Object.keys(per).filter(k=>!B[k]));
+  const open=$("#meter details")?$("#meter details").open:innerWidth>=640;
+  $("#meter").innerHTML=(n?`<div class="meter"><div class="grade">${W.planned?"·":grade(p)}<small>${Math.round(p*100)}%</small></div><div class="mbody"><div class="mtop">${head}</div>
+   <div class="bar"><i style="width:${p*100}%;background:var(--gold)"></i><i class="hatch" style="width:${n?rolled/n*100:0}%"></i></div>${note}</div></div>`:"")+ring+
+   `<details class="more-b" ${open?"open":""}><summary>By bucket ▾</summary><div class="buckets">${keys.map(k=>{const v=per[k],b=bk(k);return `<div class="bk"><div class="bl"><b><span style="color:${b.c}">●</span> ${esc(b.l)}</b><span>${v.d}/${v.n}${v.r?` · <span style="color:#a87600">${v.r} rolled</span>`:""}</span></div>
+   <div class="bb" style="background:${b.t}"><i style="width:${v.d/v.n*100}%;background:${b.c}"></i><i style="width:${v.r/v.n*100}%;background:repeating-linear-gradient(45deg,${b.c} 0 3px,${b.t} 3px 6px)"></i></div></div>`}).join("")}</div></details>`;
+}
+function ghostHTML(g){
+  const b=bk(g.b),live=MODEL.byId.get(g.of),rec=live&&isDone(live);
+  return `<div class="task ghost" style="--c:${b.c}"><div><div class="tt">${esc(g.t)}</div><div class="meta">${g.time?`<span>${esc(g.time)}</span>`:""}${g.path?`<span>${esc(g.path)}</span>`:""}${rec?`<span class="rec">✓ Recovered ${esc(lab(live.date))}</span>`:`<button class="mv" data-go="${live?live.date:g.to}">Moved to ${esc(lab(g.to))} →</button>`}</div></div></div>`;
+}
+function taskHTML(s,ro){
+  const b=bk(s.b),done=isDone(s),badges=[];
+  if(s.from){const fr=s.from==="weekend"?"the weekend":s.from;badges.push(done?`<span class="badge ok">✓ Recovered</span>`:`<span class="badge">↩ Rolled from ${esc(fr)}${s.hops>1?" · ×"+s.hops:""}</span>`)}
+  if(s.badge)badges.push(`<span class="badge ip">${esc(s.badge)}</span>`);
+  if(s.added)badges.push(`<span class="badge new">Added</span>`);
+  if(s.moved)badges.push(`<span class="badge new">Moved here</span>`);
+  if(s.ref&&s.ref.kind==="queue")badges.push(`<span class="badge ip" title="Saved in the Notion Brief queue until that week's Sunday Systems page exists">Queued</span>`);
+  const meta=[s.time?`<span>${esc(s.time)}</span>`:"",s.weekend&&s.b!=="chores"||(s.e==="x"&&s.b!=="chores")?`<span style="color:${b.c}">● ${esc(b.l)}</span>`:"",...badges].filter(Boolean).join("");
+  let g="";
+  if(/grocer/i.test(s.t)&&(s.e==="x"||s.e==="rollover")){g=`<details class="groc" id="gdet"><summary>Grocery list <span>${grocLeft()} to get ▾</span></summary><div class="gl">${groc.items.map(x=>`<label><input type="checkbox" data-g="${esc(x.id)}" ${x.checked?"checked":""}>${esc(x.label)}</label>`).join("")}</div><div class="gadd"><input id="gin" placeholder="Add an item" maxlength="80"><button class="chip" id="gbtn">Add</button></div></details>`}
+  return `<div class="task ${done?"done":""} ${ro?"ro":""}" style="--c:${b.c}"><button class="cb" data-id="${esc(s.id)}" aria-label="${done?"Mark not done":"Mark done"}"></button><div style="flex:1;min-width:0"><div class="tt ${ro?"":"ed"}" ${ro?"":`data-edit="${esc(s.id)}" role="button" tabindex="0"`}>${esc(s.t)}</div>${meta?`<div class="meta">${meta}</div>`:""}${s.body&&!done?`<div class="body">${s.body}</div>`:""}${g}</div>${ro?"":`<button class="dots3" data-edit="${esc(s.id)}" aria-label="Edit task">⋯</button>`}</div>`;
+}
+function renderDay(W){
+  const d=W.days.find(x=>x.date===sel)||W.days[0];sel=d.date;
+  const dt=pd(d.date),ro=W.history&&!editHist;
+  const rel=d.date===TODAY?"Today":d.date===add(TODAY,1)?"Tomorrow":d.date===add(TODAY,-1)?"Yesterday":"";
+  let h=`<div class="dayhead"><div><div class="sub">${rel?rel+" · ":""}${MN[dt.getMonth()]} ${dt.getDate()}</div><h2 class="${d.kind==="weekend"?"weline":""}">${DL[dt.getDay()]}</h2></div>`;
+  if(d.steps.length)h+=`<div class="sub">${d.steps.filter(isDone).length} of ${d.steps.length} done</div>`;
+  h+="</div>";
+  if(W.history)h+=`<div class="banner hist"><span>${editHist?"Editing history. Changes still sync to Notion.":"Looking back. Checks are locked so history stays honest."}</span><button id="editH">${editHist?"Done fixing":"Fix a check"}</button></div>`;
+  else if(W.planned&&d.date===wk)h+=`<div class="banner fut"><span>Planned from next week's queue and Thursday's rollover. Times get added the morning of.</span></div>`;
+  h+=weatherCal(d);
+  if(d.date<TODAY&&d.kind==="work"&&(d.steps.length||d.ghosts.length)){const fin=d.steps.filter(isDone).length;h+=`<div class="summary"><div><b>${fin}</b>finished</div><div><b>${d.ghosts.length+d.steps.filter(s=>!isDone(s)).length}</b>rolled over or open</div></div>`}
+  if(d.oneline)h+=`<div class="one ${d.kind==="weekend"?"weline":""}">${esc(d.oneline)}</div>`;
+  if(d.kind==="off"&&!d.steps.length){
+    h+=`<div class="off"><svg width="44" height="44" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#fff4cf"/><path d="M14 30a10 10 0 0 1 20 0z" fill="#f6c445"/><rect x="11" y="30" width="26" height="2.5" rx="1.2" fill="#f6c445"/></svg><h3>Day off</h3><p>${esc(d.offNote&&d.offNote!==d.oneline?d.offNote:"Fridays are yours. Nothing scheduled, nothing owed.")}</p><small>Open steps from Thursday roll to Monday, never to today.</small></div>`;
+  }else if(d.kind==="weekend"){
+    h+=`<div class="block wkd"><div class="bh"><b class="weline">Chores &amp; errands</b><span>${d.steps.filter(s=>!isDone(s)).length} left</span></div>${d.steps.map(s=>taskHTML(s,ro)).join("")||`<div class="hint" style="padding:0 4px">${W.history?"Nothing logged.":"Nothing yet. Weekend Chore Bot fills this in before the weekend."}</div>`}</div>`;
+    if(d.read)h+=`<a class="read" href="${esc(d.read.url)}" target="_blank" rel="noopener"><span><b>📚 ${esc(d.read.t)}</b>${esc(d.read.s)}</span><span>›</span></a>`;
+  }else{
+    const energy=s=>s.e==="course"?"course":s.e==="rollover"?"rollover":s.e==="creative"?"creative":"admin";
+    const gEnergy=g=>{const s=MODEL.byId.get(g.of);return s?energy(s):"creative"};
+    const mk=(title,sub,arr,gh)=>arr.length||gh.length?`<div class="block"><div class="bh"><b>${title}</b><span>${esc(sub)}</span></div>${arr.map(s=>taskHTML(s,ro)).join("")}${gh.map(ghostHTML).join("")}</div>`:"";
+    const by=k=>d.steps.filter(s=>energy(s)===k),gby=k=>d.ghosts.filter(g=>gEnergy(g)===k);
+    h+=mk("☕ Before work","7:30 to 8:15",by("course"),[])+mk("↩ Weekend rollover","fit these in",by("rollover"),gby("rollover"))+mk("🎨 Morning · Creating","9:00 to 12:30",by("creative"),gby("creative").concat(gby("course")))+mk("🗂 Afternoon · Managing",d.managing||"1:30 to 3:00",by("admin"),gby("admin"));
+    if(!d.steps.length&&!d.ghosts.length)h+=`<div class="hint" style="padding:10px 4px">${W.base.kind==="history-weekend"?"No daily brief that week.":"Nothing planned yet."}</div>`;
+  }
+  if(d.weekendPath)h+=`<a class="wkl" href="${esc(d.weekendPath)}" target="_blank" rel="noopener">Open the full weekend brief ›</a>`;
+  if(d.date>=TODAY)h+=`<button class="add" data-add="${d.date}">＋ ${d.kind==="off"?"Add something anyway":"Add to "+lab(d.date)}</button>`;
+  $("#day").innerHTML=h;
+  $("#day").querySelectorAll(".cb[data-id]").forEach(b=>b.onclick=()=>toggle(b.dataset.id,ro));
+  $("#day").querySelectorAll("[data-edit]").forEach(b=>{b.onclick=e=>{e.stopPropagation();const s=MODEL.byId.get(b.dataset.edit);if(s)openSheet(s.date,s)};b.onkeydown=e=>{if(e.key==="Enter")b.click()}});
+  $("#day").querySelectorAll(".mv").forEach(b=>b.onclick=()=>{const t=b.dataset.go;sel=t;wk=mondayOf(t);editHist=false;history.replaceState(null,"","#"+t);render();refreshNotion();window.scrollTo({top:0,behavior:"smooth"})});
+  $("#day").querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>openSheet(b.dataset.add));
+  const e=$("#editH");if(e)e.onclick=()=>{editHist=!editHist;render()};
+  $("#day").querySelectorAll("[data-g]").forEach(c=>c.onchange=()=>{const it=groc.items.find(g=>g.id===c.dataset.g);if(it){it.checked=c.checked;grocSave();$("#gdet summary span").textContent=grocLeft()+" to get ▾"}});
+  const gb=$("#gbtn");if(gb)gb.onclick=()=>{const v=$("#gin").value.trim().slice(0,80);if(!v)return;groc.items.push({id:"g"+rid(),label:v,checked:false});grocSave();render();$("#gdet").open=true};
+}
+function renderFoot(W){
+  const base=W.base||{},links=[];
+  if(base.notion_url)links.push(`<a href="${esc(base.notion_url)}" target="_blank" rel="noopener">Sunday Systems</a>`);
+  links.push(`<a href="../">Classic daily brief</a>`);
+  $("#foot").innerHTML=`<em>${esc(base.reminder||"Progress > Perfection.")}</em>Notion is the source of truth.<div class="links">${links.join("")}</div>`;
+}
+
+/* ---------- actions ---------- */
+function toggle(id,ro){
+  if(ro){toast("Tap “Fix a check” to change history");return}
+  const s=MODEL.byId.get(id);if(!s)return;
+  const now=!isDone(s);
+  if(s.lsKey){try{now?localStorage.setItem(s.lsKey,"1"):localStorage.removeItem(s.lsKey)}catch(e){}}
+  queue({action:now?"check":"uncheck",task_id:s.id,title:s.t,old_day:s.date,new_day:s.date,bucket:s.b,energy:s.e,ref:refOf(s)});
+  const b=blockOf(s);if(b)notionState[b]=now;
+  buildModel();render();
+}
+let aDay,aB="doers",aE="creative",editing=null;
+function openSheet(day,step){
+  editing=step||null;aDay=day;const w=pd(day).getDay(),we=w===6||w===0;
+  aB=step?(B[step.b]?step.b:"admin"):(we?"chores":"doers");
+  aE=step?(step.e==="admin"||step.e==="rollover"?"admin":"creative"):"creative";
+  const opts=[];for(let i=0;i<14;i++)opts.push(add(TODAY,i));if(!opts.includes(day))opts.push(day);opts.sort();
+  $("#aDays").innerHTML=opts.map(o=>{const dw=pd(o).getDay(),wke=dw===6||dw===0,off=dw===5;
+    const l=o===TODAY?"Today":o===add(TODAY,1)?"Tomorrow":lab(o);return `<button class="chip ${wke?"we":""}" data-o="${o}" ${off?'style="opacity:.55"':""}>${l}${off?" · off":""}</button>`}).join("")+`<label class="chip">📅 <input type="date" id="aDate"></label>`;
+  $("#aDays").querySelectorAll("[data-o]").forEach(c=>c.onclick=()=>{aDay=c.dataset.o;syncSheet()});
+  $("#aDate").onchange=e=>{if(/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)){aDay=e.target.value;syncSheet()}};
+  $("#aBuckets").innerHTML=Object.entries(B).filter(([k])=>k!=="course"||(step&&step.b==="course")).map(([k,b])=>`<button class="chip bchip" data-b="${k}" style="--c:${b.c};--t:${b.t}"><i></i>${esc(b.l)}</button>`).join("");
+  $("#aBuckets").querySelectorAll("[data-b]").forEach(c=>c.onclick=()=>{aB=c.dataset.b;syncSheet()});
+  $("#aTitle").value=step?step.t:"";$("#aNotes").value=step?plain(step.body):"";
+  $("#aHead").textContent=step?"Edit task":"Add a task";$("#aSave").textContent=step?"Save":"Add";$("#aDel").classList.toggle("show",!!step);
+  syncSheet();$("#scrim").classList.add("open");if(!step)setTimeout(()=>$("#aTitle").focus(),50);
+}
+function syncSheet(){
+  $("#aDays").querySelectorAll("[data-o]").forEach(c=>c.classList.toggle("on",c.dataset.o===aDay));
+  const lbl=$("#aDays label");if(lbl)lbl.classList.toggle("on",![...$("#aDays").querySelectorAll("[data-o]")].some(c=>c.dataset.o===aDay));
+  $("#aBuckets").querySelectorAll("[data-b]").forEach(c=>c.classList.toggle("bon",c.dataset.b===aB));
+  const w=pd(aDay).getDay(),we=w===6||w===0;
+  $("#aBlockRow").style.display=we?"none":"";
+  $("#aBlock").querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===aE));
+  const hasPage=!!(DATA.weeks[mondayOf(aDay)]&&DATA.weeks[mondayOf(aDay)].notion_page_id);
+  $("#aHint").textContent=(we?"Goes on the weekend list. ":"")+(hasPage?"Saved to that week's Sunday Systems page.":`Week of ${md(mondayOf(aDay))}: saved to the Notion Brief queue until that week's Sunday Systems page exists.`);
+}
+$("#aBlock").querySelectorAll("button").forEach(b=>b.onclick=()=>{aE=b.dataset.v;syncSheet()});
+$("#scrim").onclick=e=>{if(e.target.id==="scrim")$("#scrim").classList.remove("open")};
+$("#aClose").onclick=()=>$("#scrim").classList.remove("open");
+$("#aSave").onclick=()=>{
+  const t=$("#aTitle").value.trim().slice(0,300);if(!t){$("#aTitle").focus();return}
+  const w=pd(aDay).getDay(),we=w===6||w===0,notes=$("#aNotes").value.trim();
+  const energy=editing&&(editing.e==="course"||editing.e==="rollover"||editing.e==="x"&&we)?editing.e:(we?"x":aE);
+  if(editing){const s=editing;
+    const nc=notes!==plain(s.body);
+    queue({action:"edit",task_id:s.id,title:t,old_title:s.t,notes,notes_changed:nc,old_day:s.date,new_day:aDay,bucket:aB,energy,ref:refOf(s)});
+    $("#scrim").classList.remove("open");buildModel();wk=mondayOf(aDay);sel=aDay;history.replaceState(null,"","#"+aDay);render();
+    toast(aDay!==s.date?"Moved to "+lab(aDay):"Saved");return}
+  const id="t-"+rid();
+  queue({action:"add",task_id:id,title:t,notes,notes_changed:true,old_day:null,new_day:aDay,bucket:aB,energy});
+  $("#scrim").classList.remove("open");buildModel();wk=mondayOf(aDay);sel=aDay;history.replaceState(null,"","#"+aDay);render();toast("Added to "+lab(aDay));
+};
+$("#aDel").onclick=()=>{
+  const s=editing;if(!s)return;
+  const ev=queue({action:"delete",task_id:s.id,title:s.t,old_day:s.date,new_day:null,bucket:s.b,energy:s.e,ref:refOf(s)});
+  $("#scrim").classList.remove("open");buildModel();render();
+  toast("Deleted “"+(s.t.length>26?s.t.slice(0,26)+"…":s.t)+"”",()=>{
+    const i=outbox.findIndex(e=>e.client_id===ev.client_id);
+    if(i>=0){outbox.splice(i,1);saveQ();if(!outbox.length){clearTimeout(flushT);setSync("ok")}}
+    else queue({action:"restore",task_id:s.id,title:s.t,old_day:null,new_day:s.date,bucket:s.b,energy:s.e,ref:refOf(s)});
+    buildModel();render();toast("Restored")});
+};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#scrim").classList.remove("open");if(e.key==="Enter"&&e.target.id==="aTitle")$("#aSave").click()});
+function toast(m,undo){const t=$("#toast");t.textContent=m;t.classList.toggle("act",!!undo);
+  if(undo){const b=document.createElement("button");b.textContent="Undo";b.onclick=()=>{t.classList.remove("show","act");undo()};t.appendChild(b)}
+  t.classList.add("show");clearTimeout(t._);t._=setTimeout(()=>t.classList.remove("show","act"),undo?5000:1800)}
+
+/* ---------- nav + boot ---------- */
+function goWeek(n){wk=add(wk,7*n);editHist=false;sel=wk===THIS?TODAY:wk;history.replaceState(null,"","#"+sel);render();refreshNotion(true);refreshWeekend(wk)}
+$("#prev").onclick=()=>goWeek(-1);$("#next").onclick=()=>goWeek(1);
+$("#jump").onclick=()=>{wk=THIS;sel=TODAY;editHist=false;history.replaceState(null,"","#"+sel);render();refreshNotion(true)};
+let tx=null;document.querySelector("header").addEventListener("touchstart",e=>tx=e.touches[0].clientX,{passive:true});
+document.querySelector("header").addEventListener("touchend",e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>60)goWeek(dx<0?1:-1);tx=null});
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(/^\d{4}-\d{2}-\d{2}$/.test(h)&&h!==sel){wk=mondayOf(h);sel=h;editHist=false;render();refreshNotion(true)}});
+window.addEventListener("focus",()=>{refreshNotion();refreshServer();grocPull()});
+window.addEventListener("storage",e=>{if(e.key===GK){groc=LS.get(GK,groc);render()}});
+setInterval(()=>{if(document.visibilityState==="visible")refreshNotion()},45000);
+buildModel();setSync(SYNC?(outbox.length?"busy":"ok"):"local");render();
+if(outbox.length)flush();
+refreshServer();refreshNotion(true);grocPull();refreshWeekend(THIS);if(wk!==THIS)refreshWeekend(wk);
+</script>
+</body>
+</html>
